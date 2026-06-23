@@ -1,0 +1,9 @@
+/Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/auth/controller/AuthControllerIntegrationTest.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/auth/service/AuthServiceTest.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/controller/CategoryControllerIntegrationTest.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/service/CategoryServiceTest.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/product/controller/ProductControllerIntegrationTest.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/product/service/ProductServiceTest.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/security/service/JwtServiceTest.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/user/controller/UserControllerIntegrationTest.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/user/service/UserServiceTest.java

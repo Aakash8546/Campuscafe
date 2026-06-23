@@ -1,0 +1,241 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------------< com.campuscafe:backend >-----------------------
+[INFO] Building campus-cafe-backend 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.4.0:clean (default-clean) @ backend ---
+[INFO] Deleting /Users/aakashsrivastava/Desktop/campus-cafe/target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ backend ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 11 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ backend ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 90 source files with javac [debug parameters release 17] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ backend ---
+[INFO] skip non existing resourceDirectory /Users/aakashsrivastava/Desktop/campus-cafe/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ backend ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 9 source files with javac [debug parameters release 17] to target/test-classes
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/auth/controller/AuthControllerIntegrationTest.java:[36,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/auth/controller/AuthControllerIntegrationTest.java:[36,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/auth/controller/AuthControllerIntegrationTest.java:[36,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/auth/controller/AuthControllerIntegrationTest.java:[36,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/auth/controller/AuthControllerIntegrationTest.java:[36,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/auth/controller/AuthControllerIntegrationTest.java:[39,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/auth/controller/AuthControllerIntegrationTest.java:[39,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/auth/controller/AuthControllerIntegrationTest.java:[39,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/auth/controller/AuthControllerIntegrationTest.java:[39,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/auth/controller/AuthControllerIntegrationTest.java:[39,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/auth/controller/AuthControllerIntegrationTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/auth/controller/AuthControllerIntegrationTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/auth/controller/AuthControllerIntegrationTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/auth/controller/AuthControllerIntegrationTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/auth/controller/AuthControllerIntegrationTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/controller/CategoryControllerIntegrationTest.java:[49,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/controller/CategoryControllerIntegrationTest.java:[49,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/controller/CategoryControllerIntegrationTest.java:[49,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/controller/CategoryControllerIntegrationTest.java:[49,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/controller/CategoryControllerIntegrationTest.java:[49,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/controller/CategoryControllerIntegrationTest.java:[52,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/controller/CategoryControllerIntegrationTest.java:[52,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/controller/CategoryControllerIntegrationTest.java:[52,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/controller/CategoryControllerIntegrationTest.java:[52,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/controller/CategoryControllerIntegrationTest.java:[52,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/controller/CategoryControllerIntegrationTest.java:[55,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/controller/CategoryControllerIntegrationTest.java:[55,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/controller/CategoryControllerIntegrationTest.java:[55,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/controller/CategoryControllerIntegrationTest.java:[55,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/controller/CategoryControllerIntegrationTest.java:[55,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/product/controller/ProductControllerIntegrationTest.java:[54,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/product/controller/ProductControllerIntegrationTest.java:[54,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/product/controller/ProductControllerIntegrationTest.java:[54,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/product/controller/ProductControllerIntegrationTest.java:[54,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/product/controller/ProductControllerIntegrationTest.java:[54,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/product/controller/ProductControllerIntegrationTest.java:[57,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/product/controller/ProductControllerIntegrationTest.java:[57,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/product/controller/ProductControllerIntegrationTest.java:[57,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/product/controller/ProductControllerIntegrationTest.java:[57,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/product/controller/ProductControllerIntegrationTest.java:[57,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/product/controller/ProductControllerIntegrationTest.java:[60,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/product/controller/ProductControllerIntegrationTest.java:[60,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/product/controller/ProductControllerIntegrationTest.java:[60,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/product/controller/ProductControllerIntegrationTest.java:[60,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/product/controller/ProductControllerIntegrationTest.java:[60,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/user/controller/UserControllerIntegrationTest.java:[52,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/user/controller/UserControllerIntegrationTest.java:[52,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/user/controller/UserControllerIntegrationTest.java:[52,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/user/controller/UserControllerIntegrationTest.java:[52,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/user/controller/UserControllerIntegrationTest.java:[52,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/user/controller/UserControllerIntegrationTest.java:[55,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/user/controller/UserControllerIntegrationTest.java:[55,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/user/controller/UserControllerIntegrationTest.java:[55,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/user/controller/UserControllerIntegrationTest.java:[55,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/user/controller/UserControllerIntegrationTest.java:[55,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/user/controller/UserControllerIntegrationTest.java:[58,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/user/controller/UserControllerIntegrationTest.java:[58,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/user/controller/UserControllerIntegrationTest.java:[58,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/user/controller/UserControllerIntegrationTest.java:[58,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/user/controller/UserControllerIntegrationTest.java:[58,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[INFO] 
+[INFO] --- surefire:3.5.2:test (default-test) @ backend ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.campuscafe.backend.category.controller.CategoryControllerIntegrationTest
+23:44:26.241 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.campuscafe.backend.category.controller.CategoryControllerIntegrationTest]: CategoryControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+23:44:26.309 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.campuscafe.backend.CampusCafeApplication for test class com.campuscafe.backend.category.controller.CategoryControllerIntegrationTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.1)
+
+2026-06-23T23:44:26.448+05:30  INFO 62379 --- [           main] .b.c.c.CategoryControllerIntegrationTest : Starting CategoryControllerIntegrationTest using Java 17.0.12 with PID 62379 (started by aakashsrivastava in /Users/aakashsrivastava/Desktop/campus-cafe)
+2026-06-23T23:44:26.449+05:30  INFO 62379 --- [           main] .b.c.c.CategoryControllerIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-06-23T23:44:27.143+05:30  INFO 62379 --- [           main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-06-23T23:44:27.143+05:30  WARN 62379 --- [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-23T23:44:27.394+05:30  INFO 62379 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-06-23T23:44:27.395+05:30  INFO 62379 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-23T23:44:27.395+05:30  INFO 62379 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-06-23T23:44:27.410+05:30  INFO 62379 --- [           main] .b.c.c.CategoryControllerIntegrationTest : Started CategoryControllerIntegrationTest in 1.075 seconds (process running for 1.445)
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.363 s -- in com.campuscafe.backend.category.controller.CategoryControllerIntegrationTest
+[INFO] Running com.campuscafe.backend.category.service.CategoryServiceTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.108 s -- in com.campuscafe.backend.category.service.CategoryServiceTest
+[INFO] Running com.campuscafe.backend.security.service.JwtServiceTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.033 s -- in com.campuscafe.backend.security.service.JwtServiceTest
+[INFO] Running com.campuscafe.backend.auth.controller.AuthControllerIntegrationTest
+2026-06-23T23:44:27.689+05:30  INFO 62379 --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.campuscafe.backend.auth.controller.AuthControllerIntegrationTest]: AuthControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-23T23:44:27.698+05:30  INFO 62379 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.campuscafe.backend.CampusCafeApplication for test class com.campuscafe.backend.auth.controller.AuthControllerIntegrationTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.1)
+
+2026-06-23T23:44:27.709+05:30  INFO 62379 --- [           main] c.c.b.a.c.AuthControllerIntegrationTest  : Starting AuthControllerIntegrationTest using Java 17.0.12 with PID 62379 (started by aakashsrivastava in /Users/aakashsrivastava/Desktop/campus-cafe)
+2026-06-23T23:44:27.709+05:30  INFO 62379 --- [           main] c.c.b.a.c.AuthControllerIntegrationTest  : No active profile set, falling back to 1 default profile: "default"
+2026-06-23T23:44:27.830+05:30  WARN 62379 --- [           main] r$InitializeUserDetailsManagerConfigurer : Found 2 UserDetailsService beans, with names [inMemoryUserDetailsManager, com.campuscafe.backend.security.service.CustomUserDetailsService#0]. Global Authentication Manager will not use a UserDetailsService for username/password login. Consider publishing a single UserDetailsService bean.
+2026-06-23T23:44:27.840+05:30  WARN 62379 --- [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 39137d9a-9a25-4a4b-a781-7d37ed40aa2b
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-06-23T23:44:27.842+05:30  INFO 62379 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-06-23T23:44:27.842+05:30  INFO 62379 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-23T23:44:27.842+05:30  INFO 62379 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-06-23T23:44:27.846+05:30  INFO 62379 --- [           main] c.c.b.a.c.AuthControllerIntegrationTest  : Started AuthControllerIntegrationTest in 0.146 seconds (process running for 1.882)
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.181 s -- in com.campuscafe.backend.auth.controller.AuthControllerIntegrationTest
+[INFO] Running com.campuscafe.backend.auth.service.AuthServiceTest
+2026-06-23T23:44:27.984+05:30  INFO 62379 --- [           main] c.c.backend.auth.service.AuthService     : OTP generated for email admin@test.com: 935340
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.117 s -- in com.campuscafe.backend.auth.service.AuthServiceTest
+[INFO] Running com.campuscafe.backend.user.controller.UserControllerIntegrationTest
+2026-06-23T23:44:27.988+05:30  INFO 62379 --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.campuscafe.backend.user.controller.UserControllerIntegrationTest]: UserControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-23T23:44:28.000+05:30  INFO 62379 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.campuscafe.backend.CampusCafeApplication for test class com.campuscafe.backend.user.controller.UserControllerIntegrationTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.1)
+
+2026-06-23T23:44:28.011+05:30  INFO 62379 --- [           main] c.c.b.u.c.UserControllerIntegrationTest  : Starting UserControllerIntegrationTest using Java 17.0.12 with PID 62379 (started by aakashsrivastava in /Users/aakashsrivastava/Desktop/campus-cafe)
+2026-06-23T23:44:28.011+05:30  INFO 62379 --- [           main] c.c.b.u.c.UserControllerIntegrationTest  : No active profile set, falling back to 1 default profile: "default"
+2026-06-23T23:44:28.138+05:30  INFO 62379 --- [           main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-06-23T23:44:28.138+05:30  WARN 62379 --- [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-23T23:44:28.259+05:30  INFO 62379 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-06-23T23:44:28.259+05:30  INFO 62379 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-23T23:44:28.259+05:30  INFO 62379 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-06-23T23:44:28.268+05:30  INFO 62379 --- [           main] c.c.b.u.c.UserControllerIntegrationTest  : Started UserControllerIntegrationTest in 0.267 seconds (process running for 2.303)
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.314 s -- in com.campuscafe.backend.user.controller.UserControllerIntegrationTest
+[INFO] Running com.campuscafe.backend.user.service.UserServiceTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.022 s -- in com.campuscafe.backend.user.service.UserServiceTest
+[INFO] Running com.campuscafe.backend.product.controller.ProductControllerIntegrationTest
+2026-06-23T23:44:28.327+05:30  INFO 62379 --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.campuscafe.backend.product.controller.ProductControllerIntegrationTest]: ProductControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-23T23:44:28.334+05:30  INFO 62379 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.campuscafe.backend.CampusCafeApplication for test class com.campuscafe.backend.product.controller.ProductControllerIntegrationTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.1)
+
+2026-06-23T23:44:28.341+05:30  INFO 62379 --- [           main] c.b.p.c.ProductControllerIntegrationTest : Starting ProductControllerIntegrationTest using Java 17.0.12 with PID 62379 (started by aakashsrivastava in /Users/aakashsrivastava/Desktop/campus-cafe)
+2026-06-23T23:44:28.341+05:30  INFO 62379 --- [           main] c.b.p.c.ProductControllerIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-06-23T23:44:28.446+05:30  INFO 62379 --- [           main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-06-23T23:44:28.447+05:30  WARN 62379 --- [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-23T23:44:28.565+05:30  INFO 62379 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-06-23T23:44:28.566+05:30  INFO 62379 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-23T23:44:28.566+05:30  INFO 62379 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-06-23T23:44:28.572+05:30  INFO 62379 --- [           main] c.b.p.c.ProductControllerIntegrationTest : Started ProductControllerIntegrationTest in 0.237 seconds (process running for 2.607)
+2026-06-23T23:44:28.585+05:30  WARN 62379 --- [           main] ration$PageModule$WarningLoggingModifier : Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.281 s -- in com.campuscafe.backend.product.controller.ProductControllerIntegrationTest
+[INFO] Running com.campuscafe.backend.product.service.ProductServiceTest
+[ERROR] Tests run: 7, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.049 s <<< FAILURE! -- in com.campuscafe.backend.product.service.ProductServiceTest
+[ERROR] com.campuscafe.backend.product.service.ProductServiceTest.testSearchProducts_AsCashier_EnforcesAvailableOnly -- Time elapsed: 0.005 s <<< ERROR!
+org.mockito.exceptions.misusing.UnnecessaryStubbingException: 
+
+Unnecessary stubbings detected.
+Clean & maintainable test code requires zero unnecessary code.
+Following stubbings are unnecessary (click to navigate to relevant line of code):
+  1. -> at com.campuscafe.backend.product.service.ProductServiceTest.setupSecurityContext(ProductServiceTest.java:109)
+Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class.
+	at org.mockito.junit.jupiter.MockitoExtension.afterEach(MockitoExtension.java:197)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Errors: 
+[ERROR]   ProductServiceTest.testSearchProducts_AsCashier_EnforcesAvailableOnly » UnnecessaryStubbing 
+Unnecessary stubbings detected.
+Clean & maintainable test code requires zero unnecessary code.
+Following stubbings are unnecessary (click to navigate to relevant line of code):
+  1. -> at com.campuscafe.backend.product.service.ProductServiceTest.setupSecurityContext(ProductServiceTest.java:109)
+Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class.
+[INFO] 
+[ERROR] Tests run: 42, Failures: 0, Errors: 1, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  5.036 s
+[INFO] Finished at: 2026-06-23T23:44:28+05:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.5.2:test (default-test) on project backend: 
+[ERROR] 
+[ERROR] See /Users/aakashsrivastava/Desktop/campus-cafe/target/surefire-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
