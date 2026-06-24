@@ -1,9 +1,13 @@
 com/campuscafe/backend/category/service/CategoryServiceTest.class
+com/campuscafe/backend/inventory/service/InventoryCategoryServiceTest.class
+com/campuscafe/backend/product/service/ProductServiceTest.class
+com/campuscafe/backend/inventory/controller/InventoryItemControllerIntegrationTest.class
+com/campuscafe/backend/security/service/JwtServiceTest.class
+com/campuscafe/backend/auth/service/AuthServiceTest.class
 com/campuscafe/backend/auth/controller/AuthControllerIntegrationTest.class
 com/campuscafe/backend/category/controller/CategoryControllerIntegrationTest.class
 com/campuscafe/backend/user/service/UserServiceTest.class
 com/campuscafe/backend/user/controller/UserControllerIntegrationTest.class
 com/campuscafe/backend/product/controller/ProductControllerIntegrationTest.class
-com/campuscafe/backend/product/service/ProductServiceTest.class
-com/campuscafe/backend/security/service/JwtServiceTest.class
-com/campuscafe/backend/auth/service/AuthServiceTest.class
+com/campuscafe/backend/inventory/controller/InventoryCategoryControllerIntegrationTest.class
+com/campuscafe/backend/inventory/service/InventoryItemServiceTest.class

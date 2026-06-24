@@ -2,6 +2,10 @@
 /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/auth/service/AuthServiceTest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/controller/CategoryControllerIntegrationTest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/service/CategoryServiceTest.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/inventory/controller/InventoryCategoryControllerIntegrationTest.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/inventory/controller/InventoryItemControllerIntegrationTest.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/inventory/service/InventoryCategoryServiceTest.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/inventory/service/InventoryItemServiceTest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/product/controller/ProductControllerIntegrationTest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/product/service/ProductServiceTest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/security/service/JwtServiceTest.java

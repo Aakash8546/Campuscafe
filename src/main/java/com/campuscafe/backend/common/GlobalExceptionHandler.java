@@ -30,7 +30,11 @@ public class GlobalExceptionHandler {
             RoleNotFoundException.class,
             UserInactiveException.class,
             DuplicateCategoryException.class,
-            DuplicateProductException.class
+            DuplicateProductException.class,
+            DuplicateInventoryItemException.class,
+            DuplicateInventoryCategoryException.class,
+            InsufficientStockException.class,
+            InventoryValidationException.class
     })
     public ResponseEntity<ApiResponse<Void>> handleBadRequestExceptions(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -39,7 +43,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({
             CategoryNotFoundException.class,
-            ProductNotFoundException.class
+            ProductNotFoundException.class,
+            InventoryCategoryNotFoundException.class,
+            InventoryItemNotFoundException.class
     })
     public ResponseEntity<ApiResponse<Void>> handleNotFoundExceptions(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
