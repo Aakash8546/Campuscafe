@@ -5,6 +5,7 @@
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/auth/dto/LoginResponse.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/auth/dto/LogoutRequest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/auth/dto/RefreshTokenRequest.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/auth/dto/ResendOtpRequest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/auth/dto/ResetPasswordRequest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/auth/dto/SignupRequest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/auth/dto/VerifyOtpRequest.java
@@ -125,6 +126,11 @@
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/inventory/service/InventoryCategoryService.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/inventory/service/InventoryItemService.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/inventory/specification/InventoryItemSpecification.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/mail/config/EmailProperties.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/mail/config/MailConfiguration.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/mail/exception/EmailSendFailedException.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/mail/service/EmailService.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/mail/service/SmtpEmailService.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/notification/controller/NotificationController.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/notification/dto/NotificationResponse.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/notification/dto/UnreadCountResponse.java

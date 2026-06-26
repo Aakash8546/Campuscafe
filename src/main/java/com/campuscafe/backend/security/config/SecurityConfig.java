@@ -40,6 +40,7 @@ public class SecurityConfig {
                     "/auth/refresh-token",
                     "/auth/forgot-password",
                     "/auth/reset-password",
+                    "/auth/resend-otp",
                     "/swagger-ui/**",
                     "/v3/api-docs/**"
                 ).permitAll()

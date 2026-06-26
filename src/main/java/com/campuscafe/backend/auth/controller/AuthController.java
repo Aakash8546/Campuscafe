@@ -65,6 +65,13 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success("Password reset OTP generated. Please check your log/email.", data));
     }
 
+    @PostMapping("/resend-otp")
+    @Operation(summary = "Resend verification OTP via email")
+    public ResponseEntity<ApiResponse<Map<String, String>>> resendOtp(@Valid @RequestBody ResendOtpRequest request) {
+        Map<String, String> data = authService.resendOtp(request);
+        return ResponseEntity.ok(ApiResponse.success("Verification OTP resent successfully.", data));
+    }
+
     @PostMapping("/reset-password")
     @Operation(summary = "Reset password using OTP and set new password")
     public ResponseEntity<ApiResponse<Void>> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {

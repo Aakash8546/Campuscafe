@@ -2,9 +2,9 @@ server:
   port: 8081
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/campus_cafe
-    username: postgres
-    password: postgres
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/campus_cafe}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -27,9 +27,11 @@ application:
         expiration: 604800000 # 7 days (in ms)
 
 mail:
-  brevo:
-    username: ${BREVO_SMTP_USERNAME}
-    password: ${BREVO_SMTP_PASSWORD}
-    from: ${MAIL_FROM:aakashsrivastava2151@gmail.com}
-    from-name: ${MAIL_FROM_NAME:Aakash Srivastava}
+  smtp:
+    username: ${SMTP_USERNAME:apikey}
+    password: ${SMTP_PASSWORD}
+    from: ${MAIL_FROM:no-reply@example.com}
+    from-name: ${MAIL_FROM_NAME:Campus Cafe}
     otp-expiry-minutes: ${OTP_EXPIRY_MINUTES:5}
+    host: ${SMTP_HOST:smtp.sendgrid.net}
+    port: ${SMTP_PORT:587}

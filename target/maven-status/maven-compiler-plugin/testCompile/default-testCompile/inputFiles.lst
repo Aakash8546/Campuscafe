@@ -4,12 +4,14 @@
 /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/category/service/CategoryServiceTest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/dashboard/service/DashboardServiceTest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/discount/service/DiscountServiceTest.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/integration/AuthServiceEmailIntegrationTest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/integration/Phase7ControllerIntegrationTest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/integration/Phase8ControllerIntegrationTest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/inventory/controller/InventoryCategoryControllerIntegrationTest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/inventory/controller/InventoryItemControllerIntegrationTest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/inventory/service/InventoryCategoryServiceTest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/inventory/service/InventoryItemServiceTest.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/mail/service/EmailServiceTest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/notification/service/NotificationServiceTest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/order/controller/OrderControllerIntegrationTest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/test/java/com/campuscafe/backend/order/service/DiscountCalculationTest.java

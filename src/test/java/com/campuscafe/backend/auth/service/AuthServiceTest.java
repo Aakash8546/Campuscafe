@@ -9,6 +9,8 @@ import com.campuscafe.backend.domain.user.enums.VerificationPurpose;
 import com.campuscafe.backend.exception.EmailAlreadyExistsException;
 import com.campuscafe.backend.repository.*;
 import com.campuscafe.backend.security.service.JwtService;
+import com.campuscafe.backend.mail.service.EmailService;
+import com.campuscafe.backend.mail.config.EmailProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

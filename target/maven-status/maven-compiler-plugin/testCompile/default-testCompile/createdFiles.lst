@@ -12,6 +12,7 @@ com/campuscafe/backend/inventory/controller/InventoryCategoryControllerIntegrati
 com/campuscafe/backend/inventory/service/InventoryItemServiceTest.class
 com/campuscafe/backend/settings/service/MerchantSettingServiceTest.class
 com/campuscafe/backend/category/service/CategoryServiceTest.class
+com/campuscafe/backend/mail/service/EmailServiceTest.class
 com/campuscafe/backend/discount/service/DiscountServiceTest.class
 com/campuscafe/backend/order/controller/OrderControllerIntegrationTest.class
 com/campuscafe/backend/inventory/service/InventoryCategoryServiceTest.class
@@ -23,5 +24,6 @@ com/campuscafe/backend/inventory/controller/InventoryItemControllerIntegrationTe
 com/campuscafe/backend/notification/service/NotificationServiceTest.class
 com/campuscafe/backend/auth/controller/AuthControllerIntegrationTest.class
 com/campuscafe/backend/order/service/OrderPriorityAndDeductionServiceTest.class
+com/campuscafe/backend/integration/AuthServiceEmailIntegrationTest.class
 com/campuscafe/backend/user/controller/UserControllerIntegrationTest.class
 com/campuscafe/backend/product/controller/ProductRecipeControllerIntegrationTest.class

@@ -8,24 +8,30 @@ import org.springframework.stereotype.Component;
 @Data
 public class EmailProperties {
 
-    @Value("${mail.brevo.username}")
+    @Value("${mail.smtp.username:mock-username}")
     private String username;
 
-    @Value("${mail.brevo.password}")
+    @Value("${mail.smtp.password:mock-password}")
     private String password;
 
-    @Value("${mail.brevo.from}")
+    @Value("${mail.smtp.from:aakashsrivastava2151@gmail.com}")
     private String mailFrom;
 
-    @Value("${mail.brevo.from-name}")
+    @Value("${mail.smtp.from-name:Aakash Srivastava}")
     private String mailFromName;
 
-    @Value("${mail.brevo.otp-expiry-minutes}")
+    @Value("${mail.smtp.otp-expiry-minutes:5}")
     private Integer otpExpiryMinutes;
 
-    @Value("${mail.brevo.max-attempts:10}")
+    @Value("${mail.smtp.max-attempts:10}")
     private Integer maxAttempts;
 
-    @Value("${mail.brevo.initial-delay-ms:1000}")
+    @Value("${mail.smtp.initial-delay-ms:1000}")
     private Long initialDelayMs;
+
+    @Value("${mail.smtp.host:smtp.sendgrid.net}")
+    private String host;
+
+    @Value("${mail.smtp.port:587}")
+    private Integer port;
 }

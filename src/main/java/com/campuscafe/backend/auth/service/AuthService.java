@@ -237,6 +237,36 @@ public class AuthService {
         userRepository.save(user);
     }
 
+    @Transactional
+    public Map<String, String> resendOtp(ResendOtpRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + request.getEmail()));
+
+        if (request.getPurpose() == VerificationPurpose.EMAIL_VERIFICATION && user.getMerchant().getVerified()) {
+            throw new OtpInvalidException("Email is already verified");
+        }
+
+        // Generate new 6-digit OTP
+        String otp = generateOtp();
+
+        // Save new Verification Token
+        VerificationToken token = VerificationToken.builder()
+                .email(request.getEmail())
+                .otp(otp)
+                .purpose(request.getPurpose())
+                .expiresAt(Instant.now().plusSeconds(emailProperties.getOtpExpiryMinutes() * 60L))
+                .verified(false)
+                .build();
+        verificationTokenRepository.save(token);
+
+        emailService.sendOtpEmail(request.getEmail(), otp, request.getPurpose().name());
+
+        if (isDevProfile()) {
+            return Collections.singletonMap("otp", otp);
+        }
+        return Collections.emptyMap();
+    }
+
     private String generateOtp() {
         return String.format("%06d", secureRandom.nextInt(1000000));
     }
