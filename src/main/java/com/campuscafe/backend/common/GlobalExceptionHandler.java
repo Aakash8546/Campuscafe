@@ -1,6 +1,7 @@
 package com.campuscafe.backend.common;
 
 import com.campuscafe.backend.exception.*;
+import com.campuscafe.backend.mail.exception.EmailSendFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -79,6 +80,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleMerchantNotVerified(MerchantNotVerifiedException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(ApiResponse.failure(ex.getMessage(), List.of(ex.getMessage())));
+    }
+
+    @ExceptionHandler(EmailSendFailedException.class)
+    public ResponseEntity<ApiResponse<Void>> handleEmailSendFailedException(EmailSendFailedException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.failure("Unable to send verification email. Please try again later.", List.of(ex.getMessage() != null ? ex.getMessage() : "Email delivery failed")));
     }
 
     @ExceptionHandler(InvalidCredentialsException.class)

@@ -17,6 +17,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.campuscafe.backend.mail.config.EmailProperties;
+import com.campuscafe.backend.mail.service.EmailService;
 
 import java.security.SecureRandom;
 import java.time.Instant;
@@ -37,6 +39,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final Environment environment;
+    private final EmailService emailService;
+    private final EmailProperties emailProperties;
 
     private final SecureRandom secureRandom = new SecureRandom();
 
@@ -80,12 +84,12 @@ public class AuthService {
                 .email(request.getEmail())
                 .otp(otp)
                 .purpose(VerificationPurpose.EMAIL_VERIFICATION)
-                .expiresAt(Instant.now().plusSeconds(600)) // 10 minutes
+                .expiresAt(Instant.now().plusSeconds(emailProperties.getOtpExpiryMinutes() * 60L))
                 .verified(false)
                 .build();
         verificationTokenRepository.save(token);
 
-        log.info("OTP generated for email {}: {}", request.getEmail(), otp);
+        emailService.sendOtpEmail(request.getEmail(), otp, "EMAIL_VERIFICATION");
 
         if (isDevProfile()) {
             return Collections.singletonMap("otp", otp);
@@ -196,12 +200,12 @@ public class AuthService {
                 .email(request.getEmail())
                 .otp(otp)
                 .purpose(VerificationPurpose.PASSWORD_RESET)
-                .expiresAt(Instant.now().plusSeconds(600)) // 10 minutes
+                .expiresAt(Instant.now().plusSeconds(emailProperties.getOtpExpiryMinutes() * 60L))
                 .verified(false)
                 .build();
         verificationTokenRepository.save(token);
 
-        log.info("Password Reset OTP for {}: {}", request.getEmail(), otp);
+        emailService.sendOtpEmail(request.getEmail(), otp, "PASSWORD_RESET");
 
         if (isDevProfile()) {
             return Collections.singletonMap("otp", otp);

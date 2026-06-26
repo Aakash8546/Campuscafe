@@ -46,6 +46,10 @@ class AuthServiceTest {
     private JwtService jwtService;
     @Mock
     private Environment environment;
+    @Mock
+    private EmailService emailService;
+    @Mock
+    private EmailProperties emailProperties;
 
     @InjectMocks
     private AuthService authService;
@@ -56,6 +60,7 @@ class AuthServiceTest {
 
     @BeforeEach
     void setUp() {
+        lenient().when(emailProperties.getOtpExpiryMinutes()).thenReturn(5);
         signupRequest = SignupRequest.builder()
                 .cafeName("Test Cafe")
                 .email("admin@test.com")

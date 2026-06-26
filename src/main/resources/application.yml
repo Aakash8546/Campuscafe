@@ -25,3 +25,11 @@ application:
       expiration: 900000 # 15 minutes (in ms)
       refresh-token:
         expiration: 604800000 # 7 days (in ms)
+
+mail:
+  brevo:
+    username: ${BREVO_SMTP_USERNAME}
+    password: ${BREVO_SMTP_PASSWORD}
+    from: ${MAIL_FROM:aakashsrivastava2151@gmail.com}
+    from-name: ${MAIL_FROM_NAME:Aakash Srivastava}
+    otp-expiry-minutes: ${OTP_EXPIRY_MINUTES:5}
