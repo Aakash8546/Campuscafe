@@ -2,9 +2,9 @@ server:
   port: 8081
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://dpg-d8v2klrsq97s73ft2td0-a/campuscafe}
-    username: ${SPRING_DATASOURCE_USERNAME:campuscafe_user}
-    password: ${SPRING_DATASOURCE_PASSWORD:x5Dpcyw5abdfLXTSmOjRltBUr7Jd99jx}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/campus_cafe}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -28,12 +28,10 @@ application:
 
 mail:
   smtp:
-    username: ${SMTP_USERNAME:campucafe}
+    username: ${SMTP_USERNAME:apikey}
     password: ${SMTP_PASSWORD}
-    from: ${MAIL_FROM:aakashsrivastava2151@gmail.com}
-    from-name: ${MAIL_FROM_NAME:Aakash Srivastava}
+    from: ${MAIL_FROM:no-reply@example.com}
+    from-name: ${MAIL_FROM_NAME:Campus Cafe}
     otp-expiry-minutes: ${OTP_EXPIRY_MINUTES:5}
     host: ${SMTP_HOST:smtp.sendgrid.net}
     port: ${SMTP_PORT:587}
-
-

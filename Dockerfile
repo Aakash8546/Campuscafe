@@ -20,5 +20,5 @@ COPY --from=build /app/target/backend-0.0.1-SNAPSHOT.jar app.jar
 # Expose port 8081 (matches application.yml)
 EXPOSE 8081
 
-# Run the jar file
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Run the jar file with optimizations for low-resource environments (like Render Free Tier)
+ENTRYPOINT ["java", "-XX:TieredStopAtLevel=1", "-XX:+UseSerialGC", "-jar", "app.jar"]
