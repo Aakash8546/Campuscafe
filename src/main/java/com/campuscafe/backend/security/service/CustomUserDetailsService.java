@@ -18,8 +18,20 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username)
-                .map(CustomUserDetails::new)
+        com.campuscafe.backend.domain.user.User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
+        
+        // Eagerly initialize lazy loaded associations inside the active transaction
+        if (user.getRole() != null) {
+            user.getRole().getName();
+            if (user.getRole().getPermissions() != null) {
+                user.getRole().getPermissions().size();
+            }
+        }
+        if (user.getMerchant() != null) {
+            user.getMerchant().getId();
+        }
+        
+        return new CustomUserDetails(user);
     }
 }

@@ -1,6 +1,7 @@
 package com.campuscafe.backend.product.dto;
 
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -32,4 +33,7 @@ public class UpdateProductRequest {
 
     @NotNull(message = "Category ID is required")
     private Long categoryId;
+
+    @Min(value = 0, message = "Priority must be greater than or equal to zero")
+    private Integer priority;
 }

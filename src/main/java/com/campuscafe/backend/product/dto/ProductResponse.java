@@ -21,6 +21,7 @@ public class ProductResponse {
     private String imageUrl;
     private Boolean available;
     private CategoryResponse category;
+    private Integer priority;
     private Instant createdAt;
     private Instant updatedAt;
 }

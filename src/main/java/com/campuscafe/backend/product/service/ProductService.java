@@ -65,6 +65,7 @@ public class ProductService {
                 .category(category)
                 .merchant(merchant)
                 .available(true)
+                .priority(request.getPriority() != null ? request.getPriority() : 0)
                 .build();
 
         Product savedProduct = productRepository.save(product);
@@ -92,7 +93,16 @@ public class ProductService {
             spec = spec.and(ProductSpecification.withAvailable(available));
         }
 
-        Page<Product> productPage = productRepository.findAll(spec, pageable);
+        org.springframework.data.domain.Sort customSort = pageable.getSort();
+        org.springframework.data.domain.Sort prioritySort = org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Order.asc("priority"));
+        org.springframework.data.domain.Sort finalSort = customSort.isSorted() ? prioritySort.and(customSort) : prioritySort.and(org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Order.asc("name")));
+        Pageable sortedPageable = org.springframework.data.domain.PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                finalSort
+        );
+
+        Page<Product> productPage = productRepository.findAll(spec, sortedPageable);
         return productPage.map(productMapper::toSummaryResponse);
     }
 
@@ -145,6 +155,7 @@ public class ProductService {
         product.setPrice(request.getPrice());
         product.setImageUrl(request.getImageUrl());
         product.setCategory(category);
+        product.setPriority(request.getPriority() != null ? request.getPriority() : 0);
 
         Product updatedProduct = productRepository.save(product);
         return productMapper.toResponse(updatedProduct);

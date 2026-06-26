@@ -18,4 +18,5 @@ public class ProductSummaryResponse {
     private String imageUrl;
     private Boolean available;
     private String categoryName;
+    private Integer priority;
 }

@@ -34,7 +34,16 @@ public class GlobalExceptionHandler {
             DuplicateInventoryItemException.class,
             DuplicateInventoryCategoryException.class,
             InsufficientStockException.class,
-            InventoryValidationException.class
+            InventoryValidationException.class,
+            InvalidOrderStatusException.class,
+            InvalidOrderTransitionException.class,
+            ProductUnavailableException.class,
+            InvalidOrderRequestException.class,
+            DuplicateDiscountException.class,
+            InactiveDiscountException.class,
+            InvalidDateRangeException.class,
+            ReportGenerationException.class,
+            InsufficientInventoryException.class
     })
     public ResponseEntity<ApiResponse<Void>> handleBadRequestExceptions(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -45,7 +54,12 @@ public class GlobalExceptionHandler {
             CategoryNotFoundException.class,
             ProductNotFoundException.class,
             InventoryCategoryNotFoundException.class,
-            InventoryItemNotFoundException.class
+            InventoryItemNotFoundException.class,
+            OrderNotFoundException.class,
+            DiscountNotFoundException.class,
+            NotificationNotFoundException.class,
+            MerchantSettingsNotFoundException.class,
+            RecipeNotFoundException.class
     })
     public ResponseEntity<ApiResponse<Void>> handleNotFoundExceptions(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)

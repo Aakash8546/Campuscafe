@@ -232,4 +232,66 @@ class ProductServiceTest {
         assertFalse(result.getAvailable());
         assertFalse(product.getAvailable());
     }
+
+    @Test
+    void testCreateProduct_WithPriority() {
+        setupSecurityContext(adminUser);
+        CreateProductRequest request = CreateProductRequest.builder()
+                .name("Premium Espresso")
+                .price(new BigDecimal("5.00"))
+                .categoryId(1L)
+                .priority(5)
+                .build();
+
+        when(productRepository.existsByNameAndMerchantId("Premium Espresso", 1L)).thenReturn(false);
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
+        when(merchantRepository.findById(1L)).thenReturn(Optional.of(merchant));
+
+        Product savedProduct = Product.builder()
+                .name("Premium Espresso")
+                .price(new BigDecimal("5.00"))
+                .category(category)
+                .merchant(merchant)
+                .available(true)
+                .priority(5)
+                .build();
+        savedProduct.setId(11L);
+
+        org.mockito.ArgumentCaptor<Product> productCaptor = org.mockito.ArgumentCaptor.forClass(Product.class);
+        when(productRepository.save(productCaptor.capture())).thenReturn(savedProduct);
+
+        ProductResponse response = ProductResponse.builder()
+                .id(11L)
+                .name("Premium Espresso")
+                .price(new BigDecimal("5.00"))
+                .available(true)
+                .priority(5)
+                .build();
+        when(productMapper.toResponse(any(Product.class))).thenReturn(response);
+
+        ProductResponse result = productService.createProduct(request);
+
+        assertNotNull(result);
+        assertEquals(5, productCaptor.getValue().getPriority());
+        assertEquals(5, result.getPriority());
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void testSearchProducts_AppliesPrioritySorting() {
+        setupSecurityContext(cashierUser);
+
+        Product product = Product.builder().name("Hot Coffee").category(category).merchant(merchant).available(true).priority(2).build();
+        Page<Product> page = new PageImpl<>(List.of(product));
+
+        org.mockito.ArgumentCaptor<Pageable> pageableCaptor = org.mockito.ArgumentCaptor.forClass(Pageable.class);
+        when(productRepository.findAll(any(Specification.class), pageableCaptor.capture())).thenReturn(page);
+
+        productService.searchProducts(null, null, null, PageRequest.of(0, 10));
+
+        Pageable captured = pageableCaptor.getValue();
+        assertNotNull(captured.getSort());
+        assertNotNull(captured.getSort().getOrderFor("priority"));
+        assertEquals(org.springframework.data.domain.Sort.Direction.ASC, captured.getSort().getOrderFor("priority").getDirection());
+    }
 }

@@ -52,4 +52,8 @@ public class Product extends BaseEntity {
     @Column(name = "available", nullable = false)
     @Builder.Default
     private Boolean available = true;
+
+    @Column(name = "priority", nullable = false)
+    @Builder.Default
+    private Integer priority = 0;
 }
