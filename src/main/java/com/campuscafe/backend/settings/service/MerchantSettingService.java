@@ -65,13 +65,48 @@ public class MerchantSettingService {
 
         MerchantSetting setting = getOrProvisionSettings(merchantId);
 
+        // QR check
+        boolean qrChanged = (request.getUpiQrUrl() == null && setting.getUpiQrUrl() != null)
+                || (request.getUpiQrUrl() != null && !request.getUpiQrUrl().equals(setting.getUpiQrUrl()));
+        if (qrChanged && !"ADMIN".equals(currentUser.getRole())) {
+            throw new AccessDeniedException("Only ADMIN role can modify UPI QR code");
+        }
+
         setting.setBusinessName(request.getBusinessName());
         setting.setLogoUrl(request.getLogoUrl());
         setting.setContactEmail(request.getContactEmail());
         setting.setContactPhone(request.getContactPhone());
         setting.setAddress(request.getAddress());
+        
+        if (request.getPrinterSize() != null) {
+            setting.setPrinterSize(com.campuscafe.backend.domain.merchant.enums.PrinterSize.valueOf(request.getPrinterSize()));
+        }
+        setting.setUpiQrUrl(request.getUpiQrUrl());
 
         MerchantSetting updated = merchantSettingRepository.save(setting);
         return merchantSettingMapper.toResponse(updated);
+    }
+
+    public MerchantSettingResponse updateShopStatus(String statusStr) {
+        CustomUserDetails currentUser = getAuthenticatedUser();
+        if (!"ADMIN".equals(currentUser.getRole()) && !"MANAGER".equals(currentUser.getRole())) {
+            throw new AccessDeniedException("Only ADMIN or MANAGER roles can update shop status");
+        }
+
+        com.campuscafe.backend.domain.merchant.enums.ShopStatus targetStatus;
+        try {
+            targetStatus = com.campuscafe.backend.domain.merchant.enums.ShopStatus.valueOf(statusStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid shop status: " + statusStr);
+        }
+
+        Merchant merchant = merchantRepository.findById(currentUser.getMerchantId())
+                .orElseThrow(() -> new AccessDeniedException("Merchant not found"));
+
+        merchant.setShopStatus(targetStatus);
+        merchantRepository.save(merchant);
+
+        MerchantSetting setting = getOrProvisionSettings(currentUser.getMerchantId());
+        return merchantSettingMapper.toResponse(setting);
     }
 }

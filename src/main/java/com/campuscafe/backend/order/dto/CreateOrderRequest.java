@@ -22,6 +22,8 @@ public class CreateOrderRequest {
 
     private Long discountId;
 
+    private String paymentMethod;
+
     @NotEmpty(message = "Order must contain at least one item")
     @Valid
     private List<OrderItemRequest> items;

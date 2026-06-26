@@ -26,4 +26,19 @@ public interface ReportOrderItemRepository extends JpaRepository<OrderItem, Long
             @Param("start") Instant start,
             @Param("end") Instant end
     );
+
+    @Query("SELECT c.name as categoryName, SUM(oi.quantity) as quantitySold, SUM(oi.subtotal) as revenue " +
+           "FROM OrderItem oi " +
+           "JOIN oi.order o " +
+           "JOIN oi.product p " +
+           "JOIN p.category c " +
+           "WHERE o.merchant.id = :merchantId AND o.status = :status AND o.createdAt >= :start AND o.createdAt <= :end " +
+           "GROUP BY c.name " +
+           "ORDER BY SUM(oi.subtotal) DESC")
+    List<Object[]> getCategoryPerformanceReport(
+            @Param("merchantId") Long merchantId,
+            @Param("status") OrderStatus status,
+            @Param("start") Instant start,
+            @Param("end") Instant end
+    );
 }

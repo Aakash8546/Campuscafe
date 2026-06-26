@@ -100,4 +100,12 @@ public class OrderController {
         OrderResponse response = orderService.updateOrderPriority(id, request);
         return ResponseEntity.ok(ApiResponse.success("Order priority updated successfully", response));
     }
+
+    @GetMapping("/{id}/receipt")
+    @PreAuthorize("hasAuthority('ORDER_VIEW')")
+    @Operation(summary = "Get plain text thermal printer formatted receipt", description = "Requires ORDER_VIEW.")
+    public ResponseEntity<String> getReceiptText(@PathVariable Long id) {
+        String receipt = orderService.getReceiptText(id);
+        return ResponseEntity.ok(receipt);
+    }
 }

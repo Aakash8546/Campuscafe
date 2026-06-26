@@ -41,4 +41,14 @@ public class MerchantSettingController {
         MerchantSettingResponse response = merchantSettingService.updateSettings(request);
         return ResponseEntity.ok(ApiResponse.success("Merchant settings updated successfully", response));
     }
+
+    @PutMapping("/shop-status")
+    @PreAuthorize("hasAuthority('SETTINGS_UPDATE')")
+    @Operation(summary = "Update shop status (OPEN/CLOSED)", description = "Requires SETTINGS_UPDATE. Restricted to ADMIN and MANAGER roles.")
+    public ResponseEntity<ApiResponse<MerchantSettingResponse>> updateShopStatus(
+            @RequestParam String status
+    ) {
+        MerchantSettingResponse response = merchantSettingService.updateShopStatus(status);
+        return ResponseEntity.ok(ApiResponse.success("Shop status updated successfully", response));
+    }
 }

@@ -34,4 +34,9 @@ public class UpdateMerchantSettingRequest {
     private String contactPhone;
 
     private String address;
+
+    @Pattern(regexp = "^(SIZE_58MM|SIZE_80MM)$", message = "printerSize must be SIZE_58MM or SIZE_80MM")
+    private String printerSize;
+
+    private String upiQrUrl;
 }

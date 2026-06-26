@@ -1,8 +1,11 @@
 package com.campuscafe.backend.domain.merchant;
 
 import com.campuscafe.backend.domain.base.BaseEntity;
+import com.campuscafe.backend.domain.merchant.enums.ShopStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +21,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class Merchant extends BaseEntity {
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "shop_status", nullable = false, length = 10)
+    @Builder.Default
+    private ShopStatus shopStatus = ShopStatus.OPEN;
 
     @Column(name = "cafe_name", nullable = false, length = 100)
     private String cafeName;

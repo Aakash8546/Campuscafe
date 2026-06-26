@@ -21,5 +21,6 @@ public class OrderResponse {
     private BigDecimal subtotal;
     private BigDecimal discountAmount;
     private BigDecimal finalAmount;
+    private String paymentMethod;
     private Instant createdAt;
 }

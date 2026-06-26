@@ -50,6 +50,8 @@
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/inventory/enums/InventoryTransactionType.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/merchant/Merchant.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/merchant/MerchantSetting.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/merchant/enums/PrinterSize.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/merchant/enums/ShopStatus.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/notification/Notification.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/notification/enums/NotificationType.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/order/Order.java
@@ -57,6 +59,7 @@
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/order/enums/OrderPriority.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/order/enums/OrderSource.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/order/enums/OrderStatus.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/order/enums/PaymentMethod.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/product/Category.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/product/Product.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/product/ProductRecipe.java
@@ -166,6 +169,7 @@
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/product/service/ProductService.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/product/specification/ProductSpecification.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/report/controller/ReportController.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/report/dto/CategoryPerformanceResponse.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/report/dto/DailySalesReportResponse.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/report/dto/InventoryReportResponse.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/report/dto/MonthlySalesReportResponse.java

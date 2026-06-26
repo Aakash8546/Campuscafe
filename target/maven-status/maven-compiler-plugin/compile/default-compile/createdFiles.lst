@@ -1,5 +1,6 @@
 com/campuscafe/backend/inventory/mapper/InventoryItemMapper.class
 com/campuscafe/backend/auth/dto/LoginResponse.class
+com/campuscafe/backend/domain/merchant/enums/ShopStatus.class
 com/campuscafe/backend/dashboard/dto/RecentOrderResponse$RecentOrderResponseBuilder.class
 com/campuscafe/backend/dashboard/repository/DashboardOrderRepository.class
 com/campuscafe/backend/domain/inventory/InventoryTransaction.class
@@ -61,6 +62,7 @@ com/campuscafe/backend/mail/service/SmtpEmailService.class
 com/campuscafe/backend/order/dto/UpdateOrderPriorityRequest$UpdateOrderPriorityRequestBuilder.class
 com/campuscafe/backend/auth/dto/LogoutRequest.class
 com/campuscafe/backend/product/dto/UpdateProductRequest$UpdateProductRequestBuilder.class
+com/campuscafe/backend/report/dto/CategoryPerformanceResponse.class
 com/campuscafe/backend/domain/merchant/MerchantSetting$MerchantSettingBuilder.class
 com/campuscafe/backend/notification/service/NotificationService.class
 com/campuscafe/backend/domain/inventory/InventoryItem.class
@@ -69,6 +71,7 @@ com/campuscafe/backend/product/dto/CreateProductRequest.class
 com/campuscafe/backend/domain/order/OrderItem.class
 com/campuscafe/backend/settings/dto/UpdateMerchantSettingRequest.class
 com/campuscafe/backend/exception/OtpExpiredException.class
+com/campuscafe/backend/report/dto/CategoryPerformanceResponse$CategoryPerformanceResponseBuilder.class
 com/campuscafe/backend/domain/user/Permission.class
 com/campuscafe/backend/order/dto/CreateOrderRequest.class
 com/campuscafe/backend/common/ApiResponse$ApiResponseBuilder.class
@@ -138,6 +141,7 @@ com/campuscafe/backend/category/controller/CategoryController.class
 com/campuscafe/backend/domain/merchant/Merchant$MerchantBuilder.class
 com/campuscafe/backend/order/dto/OrderItemResponse$OrderItemResponseBuilder.class
 com/campuscafe/backend/domain/product/ProductRecipe.class
+com/campuscafe/backend/domain/merchant/enums/PrinterSize.class
 com/campuscafe/backend/exception/InvalidDateRangeException.class
 com/campuscafe/backend/discount/dto/DiscountResponse.class
 com/campuscafe/backend/product/dto/ProductResponse.class
@@ -203,6 +207,7 @@ com/campuscafe/backend/auth/dto/ResendOtpRequest$ResendOtpRequestBuilder.class
 com/campuscafe/backend/domain/order/enums/OrderSource.class
 com/campuscafe/backend/inventory/dto/InventoryCategoryResponse.class
 com/campuscafe/backend/report/service/ReportService.class
+com/campuscafe/backend/domain/order/enums/PaymentMethod.class
 com/campuscafe/backend/domain/order/Order.class
 com/campuscafe/backend/domain/product/Product.class
 com/campuscafe/backend/auth/dto/LoginRequest$LoginRequestBuilder.class

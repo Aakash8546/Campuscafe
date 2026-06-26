@@ -24,6 +24,7 @@ public class OrderDetailsResponse {
     private BigDecimal finalAmount;
     private String createdByEmail;
     private String createdByName;
+    private String paymentMethod;
     private List<OrderItemResponse> items;
     private Instant createdAt;
     private Instant updatedAt;

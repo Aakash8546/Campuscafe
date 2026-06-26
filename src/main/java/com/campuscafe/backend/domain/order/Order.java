@@ -5,6 +5,7 @@ import com.campuscafe.backend.domain.merchant.Merchant;
 import com.campuscafe.backend.domain.order.enums.OrderPriority;
 import com.campuscafe.backend.domain.order.enums.OrderSource;
 import com.campuscafe.backend.domain.order.enums.OrderStatus;
+import com.campuscafe.backend.domain.order.enums.PaymentMethod;
 import com.campuscafe.backend.domain.user.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -58,6 +59,11 @@ public class Order extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "source", nullable = false, length = 20)
     private OrderSource source;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_method", nullable = false, length = 20)
+    @Builder.Default
+    private PaymentMethod paymentMethod = PaymentMethod.CASH;
 
     @Column(name = "subtotal", nullable = false, precision = 12, scale = 2)
     private BigDecimal subtotal;

@@ -1,6 +1,7 @@
 package com.campuscafe.backend.order.service;
 
 import com.campuscafe.backend.domain.merchant.Merchant;
+import com.campuscafe.backend.domain.merchant.MerchantSetting;
 import com.campuscafe.backend.domain.order.Order;
 import com.campuscafe.backend.domain.order.OrderItem;
 import com.campuscafe.backend.domain.order.enums.OrderSource;
@@ -23,6 +24,9 @@ import com.campuscafe.backend.discount.repository.DiscountRepository;
 import com.campuscafe.backend.domain.discount.Discount;
 import com.campuscafe.backend.domain.discount.enums.DiscountType;
 import com.campuscafe.backend.domain.order.enums.OrderPriority;
+import com.campuscafe.backend.domain.order.enums.PaymentMethod;
+import com.campuscafe.backend.domain.merchant.enums.ShopStatus;
+import com.campuscafe.backend.repository.MerchantSettingRepository;
 import com.campuscafe.backend.domain.product.ProductRecipe;
 import com.campuscafe.backend.domain.inventory.InventoryItem;
 import com.campuscafe.backend.domain.inventory.InventoryTransaction;
@@ -63,6 +67,7 @@ public class OrderService {
     private final ProductRecipeRepository productRecipeRepository;
     private final InventoryItemRepository inventoryItemRepository;
     private final InventoryTransactionRepository inventoryTransactionRepository;
+    private final MerchantSettingRepository merchantSettingRepository;
 
     private final OrderMapper orderMapper;
 
@@ -90,6 +95,10 @@ public class OrderService {
         Merchant merchant = merchantRepository.findById(merchantId)
                 .orElseThrow(() -> new AccessDeniedException("Merchant not found"));
 
+        if (merchant.getShopStatus() == ShopStatus.CLOSED) {
+            throw new InvalidOrderRequestException("Cannot place order because the shop is CLOSED");
+        }
+
         OrderPriority priority = OrderPriority.MEDIUM;
         if (request.getPriority() != null) {
             try {
@@ -99,11 +108,21 @@ public class OrderService {
             }
         }
 
+        PaymentMethod paymentMethod = PaymentMethod.CASH;
+        if (request.getPaymentMethod() != null) {
+            try {
+                paymentMethod = PaymentMethod.valueOf(request.getPaymentMethod().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new InvalidOrderRequestException("Invalid payment method: " + request.getPaymentMethod());
+            }
+        }
+
         Order order = Order.builder()
                 .merchant(merchant)
                 .status(OrderStatus.NEW)
                 .priority(priority)
                 .source(request.getSource() != null ? request.getSource() : OrderSource.OFFLINE)
+                .paymentMethod(paymentMethod)
                 .createdBy(getCurrentUserEntity(currentUser.getUserId()))
                 .build();
 
@@ -423,5 +442,107 @@ public class OrderService {
                 .newOrders(newOrders)
                 .readyOrders(readyOrders)
                 .build();
+    }
+
+    public String getReceiptText(Long orderId) {
+        CustomUserDetails currentUser = getAuthenticatedUser();
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + orderId));
+
+        if (!order.getMerchant().getId().equals(currentUser.getMerchantId())) {
+            throw new AccessDeniedException("You do not have access to this order");
+        }
+
+        MerchantSetting setting = merchantSettingRepository.findByMerchantId(order.getMerchant().getId())
+                .orElseThrow(() -> new MerchantSettingsNotFoundException("Settings not found"));
+
+        int width = setting.getPrinterSize() == com.campuscafe.backend.domain.merchant.enums.PrinterSize.SIZE_58MM ? 32 : 48;
+
+        StringBuilder sb = new StringBuilder();
+        
+        // Helper to center text
+        java.util.function.Function<String, String> center = (text) -> {
+            if (text == null) text = "";
+            if (text.length() >= width) return text.substring(0, width);
+            int spaces = (width - text.length()) / 2;
+            return " ".repeat(spaces) + text;
+        };
+
+        String singleLine = "-".repeat(width);
+        String doubleLine = "=".repeat(width);
+
+        sb.append(doubleLine).append("\n");
+        sb.append(center.apply("TAX INVOICE")).append("\n");
+        sb.append(center.apply(setting.getBusinessName().toUpperCase())).append("\n");
+        if (setting.getAddress() != null && !setting.getAddress().isBlank()) {
+            sb.append(center.apply(setting.getAddress())).append("\n");
+        }
+        sb.append(doubleLine).append("\n");
+        
+        java.time.LocalDateTime ldt = java.time.LocalDateTime.ofInstant(order.getCreatedAt(), java.time.ZoneId.systemDefault());
+        String formattedDate = ldt.format(java.time.format.DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm"));
+
+        sb.append("Bill No : ").append(order.getOrderNumber()).append("\n");
+        sb.append("Date    : ").append(formattedDate).append("\n");
+        sb.append("Cashier : ").append(order.getCreatedBy().getName()).append("\n");
+        sb.append(doubleLine).append("\n");
+        
+        // Product List header
+        if (width == 32) {
+            sb.append(String.format("%-15s %3s %11s", "Item", "Qty", "Amount")).append("\n");
+        } else {
+            sb.append(String.format("%-25s %4s %8s %9s", "Item", "Qty", "Rate", "Amount")).append("\n");
+        }
+        sb.append(singleLine).append("\n");
+
+        for (OrderItem item : order.getItems()) {
+            String name = item.getProduct().getName();
+            if (name.length() > (width == 32 ? 15 : 25)) {
+                name = name.substring(0, (width == 32 ? 12 : 22)) + "...";
+            }
+            if (width == 32) {
+                sb.append(String.format("%-15s %3d %11.2f", name, item.getQuantity(), item.getSubtotal())).append("\n");
+            } else {
+                sb.append(String.format("%-25s %4d %8.2f %9.2f", name, item.getQuantity(), item.getUnitPrice(), item.getSubtotal())).append("\n");
+            }
+        }
+        sb.append(singleLine).append("\n");
+        
+        // Totals
+        java.util.function.BiConsumer<String, BigDecimal> addTotalLine = (label, val) -> {
+            String valStr = String.format("%.2f", val);
+            int pad = width - label.length() - valStr.length();
+            if (pad > 0) {
+                sb.append(label).append(" ".repeat(pad)).append(valStr).append("\n");
+            } else {
+                sb.append(label).append(" ").append(valStr).append("\n");
+            }
+        };
+
+        addTotalLine.accept("SUBTOTAL:", order.getSubtotal());
+        if (order.getDiscountAmount().compareTo(BigDecimal.ZERO) > 0) {
+            addTotalLine.accept("DISCOUNT:", order.getDiscountAmount());
+        }
+        
+        BigDecimal finalAmount = order.getFinalAmount();
+        BigDecimal divisor = BigDecimal.valueOf(1.05);
+        BigDecimal taxableAmount = finalAmount.divide(divisor, 2, java.math.RoundingMode.HALF_UP);
+        BigDecimal cgst = taxableAmount.multiply(BigDecimal.valueOf(0.025)).setScale(2, java.math.RoundingMode.HALF_UP);
+        BigDecimal sgst = cgst;
+
+        sb.append(singleLine).append("\n");
+        addTotalLine.accept("TAXABLE VALUE:", taxableAmount);
+        addTotalLine.accept("CGST (2.5%):", cgst);
+        addTotalLine.accept("SGST (2.5%):", sgst);
+        sb.append(singleLine).append("\n");
+        addTotalLine.accept("GRAND TOTAL:", finalAmount);
+        sb.append(doubleLine).append("\n");
+        sb.append("Payment Mode: ").append(order.getPaymentMethod() != null ? order.getPaymentMethod().name() : "N/A").append("\n");
+        sb.append(doubleLine).append("\n");
+        sb.append(center.apply("Thank you for your visit!")).append("\n");
+        sb.append(center.apply("Please visit us again!")).append("\n");
+        sb.append(doubleLine).append("\n");
+
+        return sb.toString();
     }
 }

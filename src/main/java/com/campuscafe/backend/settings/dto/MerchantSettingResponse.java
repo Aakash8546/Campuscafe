@@ -15,4 +15,7 @@ public class MerchantSettingResponse {
     private String contactEmail;
     private String contactPhone;
     private String address;
+    private String printerSize;
+    private String upiQrUrl;
+    private String shopStatus;
 }

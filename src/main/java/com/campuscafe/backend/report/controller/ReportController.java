@@ -99,4 +99,50 @@ public class ReportController {
         List<ProductPerformanceResponse> response = reportService.getProductPerformanceReport(fromDate, toDate);
         return ResponseEntity.ok(ApiResponse.success("Product performance report retrieved successfully", response));
     }
+
+    @GetMapping("/sales/daily/products")
+    @PreAuthorize("hasAuthority('REPORT_VIEW')")
+    @Operation(summary = "Get daily sales grouped by product", description = "Requires REPORT_VIEW.")
+    public ResponseEntity<ApiResponse<List<ProductPerformanceResponse>>> getDailyProductSales(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+    ) {
+        List<ProductPerformanceResponse> response = reportService.getProductPerformanceReport(date, date);
+        return ResponseEntity.ok(ApiResponse.success("Daily product sales retrieved successfully", response));
+    }
+
+    @GetMapping("/sales/daily/categories")
+    @PreAuthorize("hasAuthority('REPORT_VIEW')")
+    @Operation(summary = "Get daily sales grouped by category", description = "Requires REPORT_VIEW.")
+    public ResponseEntity<ApiResponse<List<CategoryPerformanceResponse>>> getDailyCategorySales(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+    ) {
+        List<CategoryPerformanceResponse> response = reportService.getCategoryPerformanceReport(date, date);
+        return ResponseEntity.ok(ApiResponse.success("Daily category sales retrieved successfully", response));
+    }
+
+    @GetMapping("/sales/monthly/products")
+    @PreAuthorize("hasAuthority('REPORT_VIEW')")
+    @Operation(summary = "Get monthly sales grouped by product", description = "Requires REPORT_VIEW.")
+    public ResponseEntity<ApiResponse<List<ProductPerformanceResponse>>> getMonthlyProductSales(
+            @RequestParam int year,
+            @RequestParam int month
+    ) {
+        LocalDate start = LocalDate.of(year, month, 1);
+        LocalDate end = start.plusMonths(1).minusDays(1);
+        List<ProductPerformanceResponse> response = reportService.getProductPerformanceReport(start, end);
+        return ResponseEntity.ok(ApiResponse.success("Monthly product sales retrieved successfully", response));
+    }
+
+    @GetMapping("/sales/monthly/categories")
+    @PreAuthorize("hasAuthority('REPORT_VIEW')")
+    @Operation(summary = "Get monthly sales grouped by category", description = "Requires REPORT_VIEW.")
+    public ResponseEntity<ApiResponse<List<CategoryPerformanceResponse>>> getMonthlyCategorySales(
+            @RequestParam int year,
+            @RequestParam int month
+    ) {
+        LocalDate start = LocalDate.of(year, month, 1);
+        LocalDate end = start.plusMonths(1).minusDays(1);
+        List<CategoryPerformanceResponse> response = reportService.getCategoryPerformanceReport(start, end);
+        return ResponseEntity.ok(ApiResponse.success("Monthly category sales retrieved successfully", response));
+    }
 }

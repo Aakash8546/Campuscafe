@@ -1,8 +1,11 @@
 package com.campuscafe.backend.domain.merchant;
 
 import com.campuscafe.backend.domain.base.BaseEntity;
+import com.campuscafe.backend.domain.merchant.enums.PrinterSize;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
@@ -21,6 +24,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class MerchantSetting extends BaseEntity {
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "printer_size", nullable = false, length = 10)
+    @Builder.Default
+    private PrinterSize printerSize = PrinterSize.SIZE_80MM;
+
+    @Column(name = "upi_qr_url")
+    private String upiQrUrl;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchant_id", nullable = false, unique = true)

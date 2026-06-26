@@ -212,4 +212,28 @@ public class ReportService {
         }
         return result;
     }
+
+    public List<CategoryPerformanceResponse> getCategoryPerformanceReport(LocalDate fromDate, LocalDate toDate) {
+        if (fromDate == null || toDate == null) {
+            throw new InvalidDateRangeException("fromDate and toDate are required");
+        }
+        validateDateRange(fromDate, toDate);
+
+        CustomUserDetails currentUser = getAuthenticatedUser();
+        Long merchantId = currentUser.getMerchantId();
+
+        Instant start = fromDate.atStartOfDay(ZoneOffset.UTC).toInstant();
+        Instant end = toDate.plusDays(1).atStartOfDay(ZoneOffset.UTC).toInstant();
+
+        List<Object[]> rows = reportOrderItemRepository.getCategoryPerformanceReport(merchantId, OrderStatus.COMPLETED, start, end);
+        List<CategoryPerformanceResponse> result = new ArrayList<>();
+        for (Object[] row : rows) {
+            result.add(CategoryPerformanceResponse.builder()
+                    .categoryName(row[0].toString())
+                    .quantitySold(((Number) row[1]).longValue())
+                    .revenue((BigDecimal) row[2])
+                    .build());
+        }
+        return result;
+    }
 }

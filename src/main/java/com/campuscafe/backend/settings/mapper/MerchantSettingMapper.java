@@ -7,5 +7,6 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface MerchantSettingMapper {
 
+    @org.mapstruct.Mapping(target = "shopStatus", source = "merchant.shopStatus")
     MerchantSettingResponse toResponse(MerchantSetting setting);
 }

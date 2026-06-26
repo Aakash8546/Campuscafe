@@ -5,6 +5,7 @@ import com.campuscafe.backend.domain.order.Order;
 import com.campuscafe.backend.domain.order.OrderItem;
 import com.campuscafe.backend.domain.order.enums.OrderSource;
 import com.campuscafe.backend.domain.order.enums.OrderStatus;
+import com.campuscafe.backend.domain.merchant.enums.ShopStatus;
 import com.campuscafe.backend.domain.notification.Notification;
 import com.campuscafe.backend.domain.notification.enums.NotificationType;
 import com.campuscafe.backend.domain.product.Product;
@@ -172,6 +173,21 @@ class OrderServiceTest {
         when(userRepository.findById(1L)).thenReturn(Optional.of(adminUser));
 
         assertThrows(ProductUnavailableException.class, () -> orderService.createOrder(request));
+    }
+
+    @Test
+    void testCreateOrder_ShopClosed_ThrowsInvalidOrderRequestException() {
+        setupSecurityContext(adminUser);
+        merchant.setShopStatus(ShopStatus.CLOSED);
+
+        OrderItemRequest itemReq = OrderItemRequest.builder().productId(10L).quantity(2).build();
+        CreateOrderRequest request = CreateOrderRequest.builder()
+                .items(List.of(itemReq))
+                .build();
+
+        when(merchantRepository.findById(1L)).thenReturn(Optional.of(merchant));
+
+        assertThrows(InvalidOrderRequestException.class, () -> orderService.createOrder(request));
     }
 
     @Test
