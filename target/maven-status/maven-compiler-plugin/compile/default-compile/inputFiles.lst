@@ -63,6 +63,7 @@
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/product/Category.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/product/Product.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/product/ProductRecipe.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/product/ProductVariant.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/user/Permission.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/user/RefreshToken.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/user/Role.java
@@ -159,12 +160,15 @@
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/product/dto/CreateProductRequest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/product/dto/ProductResponse.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/product/dto/ProductSummaryResponse.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/product/dto/ProductVariantRequest.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/product/dto/ProductVariantResponse.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/product/dto/RecipeRequest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/product/dto/RecipeResponse.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/product/dto/UpdateProductRequest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/product/mapper/ProductMapper.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/product/repository/ProductRecipeRepository.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/product/repository/ProductRepository.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/product/repository/ProductVariantRepository.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/product/service/ProductRecipeService.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/product/service/ProductService.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/product/specification/ProductSpecification.java

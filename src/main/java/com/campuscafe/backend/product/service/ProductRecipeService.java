@@ -86,7 +86,6 @@ public class ProductRecipeService {
         CustomUserDetails currentUser = getAuthenticatedUser();
         Long merchantId = currentUser.getMerchantId();
 
-        // Validate product access
         validateAndGetProduct(productId, merchantId);
 
         List<ProductRecipe> recipes = productRecipeRepository.findByProductIdAndMerchantId(productId, merchantId);

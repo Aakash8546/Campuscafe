@@ -2,8 +2,10 @@ package com.campuscafe.backend.product.mapper;
 
 import com.campuscafe.backend.category.mapper.CategoryMapper;
 import com.campuscafe.backend.domain.product.Product;
+import com.campuscafe.backend.domain.product.ProductVariant;
 import com.campuscafe.backend.product.dto.ProductResponse;
 import com.campuscafe.backend.product.dto.ProductSummaryResponse;
+import com.campuscafe.backend.product.dto.ProductVariantResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -14,4 +16,6 @@ public interface ProductMapper {
 
     @Mapping(target = "categoryName", source = "category.name")
     ProductSummaryResponse toSummaryResponse(Product product);
+
+    ProductVariantResponse toVariantResponse(ProductVariant variant);
 }

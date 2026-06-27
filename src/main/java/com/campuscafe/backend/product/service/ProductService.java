@@ -4,6 +4,7 @@ import com.campuscafe.backend.category.repository.CategoryRepository;
 import com.campuscafe.backend.domain.merchant.Merchant;
 import com.campuscafe.backend.domain.product.Category;
 import com.campuscafe.backend.domain.product.Product;
+import com.campuscafe.backend.domain.product.ProductVariant;
 import com.campuscafe.backend.exception.*;
 import com.campuscafe.backend.product.dto.*;
 import com.campuscafe.backend.product.mapper.ProductMapper;
@@ -41,12 +42,12 @@ public class ProductService {
         CustomUserDetails currentUser = getAuthenticatedUser();
         Long merchantId = currentUser.getMerchantId();
 
-        // Unique product name validation within merchant
+
         if (productRepository.existsByNameAndMerchantId(request.getName(), merchantId)) {
             throw new DuplicateProductException("Product already exists with name: " + request.getName());
         }
 
-        // Fetch and validate category
+
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new CategoryNotFoundException("Category not found with id: " + request.getCategoryId()));
 
@@ -68,6 +69,18 @@ public class ProductService {
                 .priority(request.getPriority() != null ? request.getPriority() : 0)
                 .build();
 
+        if (request.getVariants() != null && !request.getVariants().isEmpty()) {
+            for (ProductVariantRequest vReq : request.getVariants()) {
+                ProductVariant variant = ProductVariant.builder()
+                        .product(product)
+                        .name(vReq.getName())
+                        .price(vReq.getPrice())
+                        .available(vReq.getAvailable() != null ? vReq.getAvailable() : true)
+                        .build();
+                product.getVariants().add(variant);
+            }
+        }
+
         Product savedProduct = productRepository.save(product);
         return productMapper.toResponse(savedProduct);
     }
@@ -86,7 +99,7 @@ public class ProductService {
             spec = spec.and(ProductSpecification.withCategoryId(categoryId));
         }
 
-        // Cashier visibility rule: Cashiers can only see available products
+
         if (currentUser.getRole().equals("CASHIER")) {
             spec = spec.and(ProductSpecification.withAvailable(true));
         } else if (available != null) {
@@ -112,12 +125,12 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
 
-        // Tenant check
+
         if (!product.getMerchant().getId().equals(currentUser.getMerchantId())) {
             throw new AccessDeniedException("You do not have access to this product");
         }
 
-        // Cashier check: Cashier cannot see unavailable products
+
         if (currentUser.getRole().equals("CASHIER") && !product.getAvailable()) {
             throw new AccessDeniedException("You do not have access to this product");
         }
@@ -132,17 +145,17 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
 
-        // Tenant check
+
         if (!product.getMerchant().getId().equals(merchantId)) {
             throw new AccessDeniedException("You do not have access to this product");
         }
 
-        // Unique product name validation
+
         if (productRepository.existsByNameAndMerchantIdAndIdNot(request.getName(), merchantId, id)) {
             throw new DuplicateProductException("Product already exists with name: " + request.getName());
         }
 
-        // Fetch and validate category
+
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new CategoryNotFoundException("Category not found with id: " + request.getCategoryId()));
 
@@ -157,6 +170,19 @@ public class ProductService {
         product.setCategory(category);
         product.setPriority(request.getPriority() != null ? request.getPriority() : 0);
 
+        if (request.getVariants() != null) {
+            product.getVariants().clear();
+            for (ProductVariantRequest vReq : request.getVariants()) {
+                ProductVariant variant = ProductVariant.builder()
+                        .product(product)
+                        .name(vReq.getName())
+                        .price(vReq.getPrice())
+                        .available(vReq.getAvailable() != null ? vReq.getAvailable() : true)
+                        .build();
+                product.getVariants().add(variant);
+            }
+        }
+
         Product updatedProduct = productRepository.save(product);
         return productMapper.toResponse(updatedProduct);
     }
@@ -166,7 +192,7 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
 
-        // Tenant check
+
         if (!product.getMerchant().getId().equals(currentUser.getMerchantId())) {
             throw new AccessDeniedException("You do not have access to this product");
         }
@@ -181,7 +207,7 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
 
-        // Tenant check
+
         if (!product.getMerchant().getId().equals(currentUser.getMerchantId())) {
             throw new AccessDeniedException("You do not have access to this product");
         }

@@ -19,5 +19,7 @@ public interface OrderMapper {
 
     @Mapping(target = "productId", source = "product.id")
     @Mapping(target = "productName", source = "product.name")
+    @Mapping(target = "variantId", source = "variant.id")
+    @Mapping(target = "variantName", source = "variantName")
     OrderItemResponse toItemResponse(OrderItem item);
 }

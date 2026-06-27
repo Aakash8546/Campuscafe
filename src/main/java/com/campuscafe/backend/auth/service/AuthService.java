@@ -50,7 +50,7 @@ public class AuthService {
             throw new EmailAlreadyExistsException("Email already exists: " + request.getEmail());
         }
 
-        // Create Merchant
+
         Merchant merchant = Merchant.builder()
                 .cafeName(request.getCafeName())
                 .email(request.getEmail())
@@ -60,11 +60,11 @@ public class AuthService {
                 .build();
         merchant = merchantRepository.save(merchant);
 
-        // Find Admin Role
+
         Role adminRole = roleRepository.findByName("ADMIN")
                 .orElseThrow(() -> new RuntimeException("ADMIN role not seeded in system"));
 
-        // Create Admin User
+
         User user = User.builder()
                 .merchant(merchant)
                 .role(adminRole)
@@ -76,10 +76,10 @@ public class AuthService {
                 .build();
         userRepository.save(user);
 
-        // Generate 6-digit OTP
+
         String otp = generateOtp();
 
-        // Save Verification Token
+
         VerificationToken token = VerificationToken.builder()
                 .email(request.getEmail())
                 .otp(otp)
@@ -246,10 +246,10 @@ public class AuthService {
             throw new OtpInvalidException("Email is already verified");
         }
 
-        // Generate new 6-digit OTP
+
         String otp = generateOtp();
 
-        // Save new Verification Token
+
         VerificationToken token = VerificationToken.builder()
                 .email(request.getEmail())
                 .otp(otp)

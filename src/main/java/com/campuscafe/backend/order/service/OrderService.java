@@ -17,6 +17,8 @@ import com.campuscafe.backend.order.repository.OrderItemRepository;
 import com.campuscafe.backend.order.repository.OrderRepository;
 import com.campuscafe.backend.order.specification.OrderSpecification;
 import com.campuscafe.backend.product.repository.ProductRepository;
+import com.campuscafe.backend.product.repository.ProductVariantRepository;
+import com.campuscafe.backend.domain.product.ProductVariant;
 import com.campuscafe.backend.repository.MerchantRepository;
 import com.campuscafe.backend.repository.NotificationRepository;
 import com.campuscafe.backend.repository.UserRepository;
@@ -60,6 +62,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final ProductRepository productRepository;
+    private final ProductVariantRepository productVariantRepository;
     private final MerchantRepository merchantRepository;
     private final UserRepository userRepository;
     private final NotificationRepository notificationRepository;
@@ -137,31 +140,53 @@ public class OrderService {
             Product product = productRepository.findById(itemReq.getProductId())
                     .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + itemReq.getProductId()));
 
-            // Tenant Check
+
             if (!product.getMerchant().getId().equals(merchantId)) {
                 throw new AccessDeniedException("You do not have access to this product");
             }
 
-            // Availability Check
+
             if (!product.getAvailable()) {
                 throw new ProductUnavailableException("Product '" + product.getName() + "' is currently unavailable");
             }
 
-            BigDecimal itemSubtotal = product.getPrice().multiply(BigDecimal.valueOf(itemReq.getQuantity()));
+            BigDecimal unitPrice = product.getPrice();
+            ProductVariant selectedVariant = null;
+            String variantName = null;
+
+            if (itemReq.getVariantId() != null) {
+                selectedVariant = productVariantRepository.findById(itemReq.getVariantId())
+                        .orElseThrow(() -> new InvalidOrderRequestException("Variant not found with id: " + itemReq.getVariantId()));
+
+                if (!selectedVariant.getProduct().getId().equals(product.getId())) {
+                    throw new InvalidOrderRequestException("Variant " + itemReq.getVariantId() + " does not belong to product " + product.getId());
+                }
+
+                if (!selectedVariant.getAvailable()) {
+                    throw new ProductUnavailableException("Variant '" + selectedVariant.getName() + "' for product '" + product.getName() + "' is currently unavailable");
+                }
+
+                unitPrice = selectedVariant.getPrice();
+                variantName = selectedVariant.getName();
+            }
+
+            BigDecimal itemSubtotal = unitPrice.multiply(BigDecimal.valueOf(itemReq.getQuantity()));
             subtotal = subtotal.add(itemSubtotal);
 
             OrderItem orderItem = OrderItem.builder()
                     .order(order)
                     .product(product)
+                    .variant(selectedVariant)
+                    .variantName(variantName)
                     .quantity(itemReq.getQuantity())
-                    .unitPrice(product.getPrice())
+                    .unitPrice(unitPrice)
                     .subtotal(itemSubtotal)
                     .build();
 
             orderItems.add(orderItem);
         }
 
-        // Apply Discount
+
         BigDecimal discountAmount = BigDecimal.ZERO;
         if (request.getDiscountId() != null) {
             Discount discount = discountRepository.findByIdAndMerchantId(request.getDiscountId(), merchantId)
@@ -192,7 +217,7 @@ public class OrderService {
         order.setDiscountAmount(discountAmount);
         order.setFinalAmount(subtotal.subtract(discountAmount));
 
-        // Generate Order Number
+
         String dateStr = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         Long sequenceVal = orderRepository.getNextOrderNumberSequence();
         String orderNumber = String.format("ORD-%s-%d", dateStr, sequenceVal);
@@ -200,7 +225,7 @@ public class OrderService {
 
         Order savedOrder = orderRepository.save(order);
 
-        // Send NEW_ORDER Notification
+
         Notification notification = Notification.builder()
                 .merchant(merchant)
                 .type(NotificationType.NEW_ORDER)
@@ -362,7 +387,7 @@ public class OrderService {
             }
         }
 
-        // Validate stock sufficiency for all ingredients first
+
         for (java.util.Map.Entry<InventoryItem, BigDecimal> entry : requiredDeductions.entrySet()) {
             InventoryItem ingredient = entry.getKey();
             BigDecimal req = entry.getValue();
@@ -376,7 +401,7 @@ public class OrderService {
             }
         }
 
-        // Deduct stock and save transaction logs
+
         for (java.util.Map.Entry<InventoryItem, BigDecimal> entry : requiredDeductions.entrySet()) {
             InventoryItem ingredient = entry.getKey();
             BigDecimal req = entry.getValue();
@@ -497,6 +522,9 @@ public class OrderService {
 
         for (OrderItem item : order.getItems()) {
             String name = item.getProduct().getName();
+            if (item.getVariantName() != null && !item.getVariantName().isBlank()) {
+                name = name + " (" + item.getVariantName() + ")";
+            }
             if (name.length() > (width == 32 ? 15 : 25)) {
                 name = name.substring(0, (width == 32 ? 12 : 22)) + "...";
             }

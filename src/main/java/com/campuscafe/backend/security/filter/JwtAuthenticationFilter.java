@@ -55,7 +55,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
-            // If validation fails, let it fall through. SecurityContext remains unauthenticated.
+
         }
 
         filterChain.doFilter(request, response);

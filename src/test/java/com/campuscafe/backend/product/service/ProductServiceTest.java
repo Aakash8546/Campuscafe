@@ -148,6 +148,52 @@ class ProductServiceTest {
     }
 
     @Test
+    void testCreateProduct_WithVariants_Success() {
+        setupSecurityContext(adminUser);
+        ProductVariantRequest v1 = ProductVariantRequest.builder().name("Small").price(new BigDecimal("3.50")).build();
+        ProductVariantRequest v2 = ProductVariantRequest.builder().name("Large").price(new BigDecimal("5.50")).build();
+        CreateProductRequest request = CreateProductRequest.builder()
+                .name("Iced Latte")
+                .price(new BigDecimal("4.50"))
+                .categoryId(1L)
+                .variants(List.of(v1, v2))
+                .build();
+
+        when(productRepository.existsByNameAndMerchantId("Iced Latte", 1L)).thenReturn(false);
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
+        when(merchantRepository.findById(1L)).thenReturn(Optional.of(merchant));
+
+        Product savedProduct = Product.builder()
+                .name("Iced Latte")
+                .price(new BigDecimal("4.50"))
+                .category(category)
+                .merchant(merchant)
+                .available(true)
+                .build();
+        savedProduct.setId(11L);
+        when(productRepository.save(any(Product.class))).thenReturn(savedProduct);
+
+        ProductVariantResponse vr1 = ProductVariantResponse.builder().id(1L).name("Small").price(new BigDecimal("3.50")).available(true).build();
+        ProductVariantResponse vr2 = ProductVariantResponse.builder().id(2L).name("Large").price(new BigDecimal("5.50")).available(true).build();
+        ProductResponse response = ProductResponse.builder()
+                .id(11L)
+                .name("Iced Latte")
+                .price(new BigDecimal("4.50"))
+                .variants(List.of(vr1, vr2))
+                .available(true)
+                .build();
+        when(productMapper.toResponse(any(Product.class))).thenReturn(response);
+
+        ProductResponse result = productService.createProduct(request);
+
+        assertNotNull(result);
+        assertEquals(11L, result.getId());
+        assertNotNull(result.getVariants());
+        assertEquals(2, result.getVariants().size());
+        verify(productRepository, times(1)).save(any(Product.class));
+    }
+
+    @Test
     void testCreateProduct_DuplicateName_ThrowsDuplicateProductException() {
         setupSecurityContext(adminUser);
         CreateProductRequest request = CreateProductRequest.builder().name("Hot Coffee").build();

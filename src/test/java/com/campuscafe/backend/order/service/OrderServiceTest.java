@@ -16,6 +16,8 @@ import com.campuscafe.backend.order.mapper.OrderMapper;
 import com.campuscafe.backend.order.repository.OrderItemRepository;
 import com.campuscafe.backend.order.repository.OrderRepository;
 import com.campuscafe.backend.product.repository.ProductRepository;
+import com.campuscafe.backend.product.repository.ProductVariantRepository;
+import com.campuscafe.backend.domain.product.ProductVariant;
 import com.campuscafe.backend.repository.MerchantRepository;
 import com.campuscafe.backend.repository.NotificationRepository;
 import com.campuscafe.backend.repository.UserRepository;
@@ -51,6 +53,9 @@ class OrderServiceTest {
 
     @Mock
     private ProductRepository productRepository;
+
+    @Mock
+    private ProductVariantRepository productVariantRepository;
 
     @Mock
     private MerchantRepository merchantRepository;
@@ -156,6 +161,54 @@ class OrderServiceTest {
 
         verify(orderRepository, times(1)).save(any(Order.class));
         verify(notificationRepository, times(1)).save(any(Notification.class));
+    }
+
+    @Test
+    void testCreateOrder_WithVariant_Success() {
+        setupSecurityContext(adminUser);
+
+        ProductVariant variant = ProductVariant.builder().name("Large").price(new BigDecimal("6.00")).product(product).available(true).build();
+        variant.setId(50L);
+
+        OrderItemRequest itemReq = OrderItemRequest.builder().productId(10L).variantId(50L).quantity(2).build();
+        CreateOrderRequest request = CreateOrderRequest.builder()
+                .source(OrderSource.OFFLINE)
+                .items(List.of(itemReq))
+                .build();
+
+        when(merchantRepository.findById(1L)).thenReturn(Optional.of(merchant));
+        when(productRepository.findById(10L)).thenReturn(Optional.of(product));
+        when(productVariantRepository.findById(50L)).thenReturn(Optional.of(variant));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(adminUser));
+        when(orderRepository.getNextOrderNumberSequence()).thenReturn(1002L);
+
+        Order savedOrder = Order.builder()
+                .merchant(merchant)
+                .orderNumber("ORD-20260624-0002")
+                .status(OrderStatus.NEW)
+                .source(OrderSource.OFFLINE)
+                .subtotal(new BigDecimal("12.00"))
+                .discountAmount(BigDecimal.ZERO)
+                .finalAmount(new BigDecimal("12.00"))
+                .build();
+        savedOrder.setId(101L);
+        when(orderRepository.save(any(Order.class))).thenReturn(savedOrder);
+
+        OrderResponse response = OrderResponse.builder()
+                .id(101L)
+                .orderNumber("ORD-20260624-0002")
+                .status("NEW")
+                .finalAmount(new BigDecimal("12.00"))
+                .build();
+        when(orderMapper.toResponse(any(Order.class))).thenReturn(response);
+
+        OrderResponse result = orderService.createOrder(request);
+
+        assertNotNull(result);
+        assertEquals("ORD-20260624-0002", result.getOrderNumber());
+        assertEquals(new BigDecimal("12.00"), result.getFinalAmount());
+
+        verify(orderRepository, times(1)).save(any(Order.class));
     }
 
     @Test

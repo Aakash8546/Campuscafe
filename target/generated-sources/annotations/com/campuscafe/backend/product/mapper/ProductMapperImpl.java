@@ -3,15 +3,19 @@ package com.campuscafe.backend.product.mapper;
 import com.campuscafe.backend.category.mapper.CategoryMapper;
 import com.campuscafe.backend.domain.product.Category;
 import com.campuscafe.backend.domain.product.Product;
+import com.campuscafe.backend.domain.product.ProductVariant;
 import com.campuscafe.backend.product.dto.ProductResponse;
 import com.campuscafe.backend.product.dto.ProductSummaryResponse;
+import com.campuscafe.backend.product.dto.ProductVariantResponse;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-06-26T22:35:37+0530",
+    date = "2026-06-27T18:05:18+0530",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.12 (Oracle Corporation)"
 )
 @Component
@@ -36,6 +40,7 @@ public class ProductMapperImpl implements ProductMapper {
         productResponse.available( product.getAvailable() );
         productResponse.category( categoryMapper.toResponse( product.getCategory() ) );
         productResponse.priority( product.getPriority() );
+        productResponse.variants( productVariantListToProductVariantResponseList( product.getVariants() ) );
         productResponse.createdAt( product.getCreatedAt() );
         productResponse.updatedAt( product.getUpdatedAt() );
 
@@ -59,6 +64,35 @@ public class ProductMapperImpl implements ProductMapper {
         productSummaryResponse.priority( product.getPriority() );
 
         return productSummaryResponse.build();
+    }
+
+    @Override
+    public ProductVariantResponse toVariantResponse(ProductVariant variant) {
+        if ( variant == null ) {
+            return null;
+        }
+
+        ProductVariantResponse.ProductVariantResponseBuilder productVariantResponse = ProductVariantResponse.builder();
+
+        productVariantResponse.id( variant.getId() );
+        productVariantResponse.name( variant.getName() );
+        productVariantResponse.price( variant.getPrice() );
+        productVariantResponse.available( variant.getAvailable() );
+
+        return productVariantResponse.build();
+    }
+
+    protected List<ProductVariantResponse> productVariantListToProductVariantResponseList(List<ProductVariant> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<ProductVariantResponse> list1 = new ArrayList<ProductVariantResponse>( list.size() );
+        for ( ProductVariant productVariant : list ) {
+            list1.add( toVariantResponse( productVariant ) );
+        }
+
+        return list1;
     }
 
     private String productCategoryName(Product product) {

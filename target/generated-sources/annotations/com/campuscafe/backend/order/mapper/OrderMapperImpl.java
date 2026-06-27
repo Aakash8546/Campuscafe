@@ -3,6 +3,7 @@ package com.campuscafe.backend.order.mapper;
 import com.campuscafe.backend.domain.order.Order;
 import com.campuscafe.backend.domain.order.OrderItem;
 import com.campuscafe.backend.domain.product.Product;
+import com.campuscafe.backend.domain.product.ProductVariant;
 import com.campuscafe.backend.domain.user.User;
 import com.campuscafe.backend.order.dto.OrderDetailsResponse;
 import com.campuscafe.backend.order.dto.OrderItemResponse;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-06-26T22:35:37+0530",
+    date = "2026-06-27T18:05:18+0530",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.12 (Oracle Corporation)"
 )
 @Component
@@ -94,6 +95,8 @@ public class OrderMapperImpl implements OrderMapper {
 
         orderItemResponse.productId( itemProductId( item ) );
         orderItemResponse.productName( itemProductName( item ) );
+        orderItemResponse.variantId( itemVariantId( item ) );
+        orderItemResponse.variantName( item.getVariantName() );
         orderItemResponse.id( item.getId() );
         orderItemResponse.quantity( item.getQuantity() );
         orderItemResponse.unitPrice( item.getUnitPrice() );
@@ -173,5 +176,20 @@ public class OrderMapperImpl implements OrderMapper {
             return null;
         }
         return name;
+    }
+
+    private Long itemVariantId(OrderItem orderItem) {
+        if ( orderItem == null ) {
+            return null;
+        }
+        ProductVariant variant = orderItem.getVariant();
+        if ( variant == null ) {
+            return null;
+        }
+        Long id = variant.getId();
+        if ( id == null ) {
+            return null;
+        }
+        return id;
     }
 }

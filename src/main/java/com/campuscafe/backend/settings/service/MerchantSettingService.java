@@ -65,7 +65,7 @@ public class MerchantSettingService {
 
         MerchantSetting setting = getOrProvisionSettings(merchantId);
 
-        // QR check
+
         boolean qrChanged = (request.getUpiQrUrl() == null && setting.getUpiQrUrl() != null)
                 || (request.getUpiQrUrl() != null && !request.getUpiQrUrl().equals(setting.getUpiQrUrl()));
         if (qrChanged && !"ADMIN".equals(currentUser.getRole())) {

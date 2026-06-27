@@ -39,7 +39,7 @@ public class CategoryService {
         CustomUserDetails currentUser = getAuthenticatedUser();
         Long merchantId = currentUser.getMerchantId();
 
-        // Check uniqueness within merchant
+
         if (categoryRepository.existsByNameAndMerchantId(request.getName(), merchantId)) {
             throw new DuplicateCategoryException("Category already exists with name: " + request.getName());
         }
@@ -87,12 +87,12 @@ public class CategoryService {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("Category not found with id: " + id));
 
-        // Tenant check
+
         if (!category.getMerchant().getId().equals(merchantId)) {
             throw new AccessDeniedException("You do not have access to this category");
         }
 
-        // Unique name check excluding current category
+
         if (categoryRepository.existsByNameAndMerchantIdAndIdNot(request.getName(), merchantId, id)) {
             throw new DuplicateCategoryException("Category already exists with name: " + request.getName());
         }
@@ -109,7 +109,7 @@ public class CategoryService {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("Category not found with id: " + id));
 
-        // Tenant check
+
         if (!category.getMerchant().getId().equals(currentUser.getMerchantId())) {
             throw new AccessDeniedException("You do not have access to this category");
         }

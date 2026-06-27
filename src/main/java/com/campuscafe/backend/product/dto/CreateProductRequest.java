@@ -1,5 +1,6 @@
 package com.campuscafe.backend.product.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -11,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @Builder
@@ -36,4 +38,7 @@ public class CreateProductRequest {
 
     @Min(value = 0, message = "Priority must be greater than or equal to zero")
     private Integer priority;
+
+    @Valid
+    private List<ProductVariantRequest> variants;
 }

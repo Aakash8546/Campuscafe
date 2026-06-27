@@ -1,6 +1,7 @@
 package com.campuscafe.backend.domain.order;
 
 import com.campuscafe.backend.domain.product.Product;
+import com.campuscafe.backend.domain.product.ProductVariant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -38,6 +39,13 @@ public class OrderItem {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "variant_id")
+    private ProductVariant variant;
+
+    @Column(name = "variant_name", length = 50)
+    private String variantName;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;

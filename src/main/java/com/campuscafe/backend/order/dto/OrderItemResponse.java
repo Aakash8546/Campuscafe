@@ -15,6 +15,8 @@ public class OrderItemResponse {
     private Long id;
     private Long productId;
     private String productName;
+    private Long variantId;
+    private String variantName;
     private Integer quantity;
     private BigDecimal unitPrice;
     private BigDecimal subtotal;
