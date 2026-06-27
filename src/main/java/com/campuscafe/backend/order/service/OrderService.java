@@ -536,7 +536,7 @@ public class OrderService {
         }
         sb.append(singleLine).append("\n");
         
-        // Totals
+
         java.util.function.BiConsumer<String, BigDecimal> addTotalLine = (label, val) -> {
             String valStr = String.format("%.2f", val);
             int pad = width - label.length() - valStr.length();
