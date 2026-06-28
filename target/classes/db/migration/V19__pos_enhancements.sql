@@ -1,6 +1,0 @@
-ALTER TABLE orders ADD COLUMN payment_method VARCHAR(20) DEFAULT 'CASH' NOT NULL;
-
-ALTER TABLE merchants ADD COLUMN shop_status VARCHAR(10) DEFAULT 'OPEN' NOT NULL;
-
-ALTER TABLE merchant_settings ADD COLUMN printer_size VARCHAR(10) DEFAULT 'SIZE_80MM' NOT NULL;
-ALTER TABLE merchant_settings ADD COLUMN upi_qr_url VARCHAR(255);
