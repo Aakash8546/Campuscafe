@@ -45,7 +45,9 @@ public class SecurityConfig {
                     "/ws-kot",
                     "/ws-kot/**",
                     "/swagger-ui/**",
-                    "/v3/api-docs/**"
+                    "/v3/api-docs/**",
+                    "/actuator/health",
+                    "/actuator/info"
                 ).permitAll()
                 .anyRequest().authenticated()
             )

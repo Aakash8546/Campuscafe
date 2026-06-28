@@ -1,19 +1,35 @@
 server:
   port: ${PORT:8081}
+  shutdown: graceful
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
 
 spring:
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
   application:
     name: campus-cafe-backend
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
 
 application:
   security:
     jwt:
-      secret-key: ${JWT_SECRET_KEY:9a6747fc6259aa374ab4e1bb2a0918dd2199978e5f19e6eef5a070514e21a2f9}
+      secret-key: ${JWT_SECRET_KEY:}
       expiration: ${JWT_EXPIRATION:900000} # 15 minutes in ms
       refresh-token:
         expiration: ${JWT_REFRESH_EXPIRATION:604800000} # 7 days in ms
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized
 
 mail:
   smtp:
