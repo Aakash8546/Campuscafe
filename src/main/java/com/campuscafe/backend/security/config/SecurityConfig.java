@@ -47,6 +47,7 @@ public class SecurityConfig {
                     "/auth/forgot-password",
                     "/auth/reset-password",
                     "/auth/resend-otp",
+                    "/auth/logout",
                     "/orders/public/**",
                     "/ws-kot",
                     "/ws-kot/**",
