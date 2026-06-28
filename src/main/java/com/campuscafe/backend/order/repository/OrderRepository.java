@@ -20,6 +20,8 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
 
     boolean existsByOrderNumberAndMerchantId(String orderNumber, Long merchantId);
 
+    boolean existsByMerchantIdAndOrderNumberAndCreatedAtBetween(Long merchantId, String orderNumber, Instant start, Instant end);
+
     List<Order> findByMerchantId(Long merchantId);
 
     long countByMerchantIdAndCreatedAtBetween(Long merchantId, Instant start, Instant end);

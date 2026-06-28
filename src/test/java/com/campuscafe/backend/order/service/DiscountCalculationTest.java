@@ -148,7 +148,7 @@ class DiscountCalculationTest {
         when(productRepository.findById(10L)).thenReturn(Optional.of(product));
         when(userRepository.findById(1L)).thenReturn(Optional.of(adminUser));
         when(discountRepository.findByIdAndMerchantId(100L, 1L)).thenReturn(Optional.of(percentageDiscount));
-        when(orderRepository.getNextOrderNumberSequence()).thenReturn(1001L);
+        when(orderRepository.existsByMerchantIdAndOrderNumberAndCreatedAtBetween(any(), any(), any(), any())).thenReturn(false);
 
         Order savedOrder = Order.builder()
                 .merchant(merchant)
@@ -192,7 +192,7 @@ class DiscountCalculationTest {
         when(productRepository.findById(10L)).thenReturn(Optional.of(product));
         when(userRepository.findById(1L)).thenReturn(Optional.of(adminUser));
         when(discountRepository.findByIdAndMerchantId(300L, 1L)).thenReturn(Optional.of(cappedDiscount));
-        when(orderRepository.getNextOrderNumberSequence()).thenReturn(1001L);
+        when(orderRepository.existsByMerchantIdAndOrderNumberAndCreatedAtBetween(any(), any(), any(), any())).thenReturn(false);
 
         Order savedOrder = Order.builder()
                 .merchant(merchant)
@@ -236,7 +236,7 @@ class DiscountCalculationTest {
         when(productRepository.findById(10L)).thenReturn(Optional.of(product));
         when(userRepository.findById(1L)).thenReturn(Optional.of(adminUser));
         when(discountRepository.findByIdAndMerchantId(200L, 1L)).thenReturn(Optional.of(flatDiscount));
-        when(orderRepository.getNextOrderNumberSequence()).thenReturn(1001L);
+        when(orderRepository.existsByMerchantIdAndOrderNumberAndCreatedAtBetween(any(), any(), any(), any())).thenReturn(false);
 
         Order savedOrder = Order.builder()
                 .merchant(merchant)
@@ -280,7 +280,7 @@ class DiscountCalculationTest {
         when(productRepository.findById(10L)).thenReturn(Optional.of(product));
         when(userRepository.findById(1L)).thenReturn(Optional.of(adminUser));
         when(discountRepository.findByIdAndMerchantId(200L, 1L)).thenReturn(Optional.of(flatDiscount));
-        when(orderRepository.getNextOrderNumberSequence()).thenReturn(1001L);
+        when(orderRepository.existsByMerchantIdAndOrderNumberAndCreatedAtBetween(any(), any(), any(), any())).thenReturn(false);
 
         Order savedOrder = Order.builder()
                 .merchant(merchant)

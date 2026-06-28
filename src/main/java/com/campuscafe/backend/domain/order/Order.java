@@ -47,6 +47,9 @@ public class Order extends BaseEntity {
     @Column(name = "order_number", nullable = false, length = 50)
     private String orderNumber;
 
+    @Column(name = "bill_serial_number")
+    private Long billSerialNumber;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
     private OrderStatus status;

@@ -218,10 +218,23 @@ public class OrderService {
         order.setFinalAmount(subtotal.subtract(discountAmount));
 
 
-        String dateStr = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        Long sequenceVal = orderRepository.getNextOrderNumberSequence();
-        String orderNumber = String.format("ORD-%s-%d", dateStr, sequenceVal);
+        java.time.LocalDate today = java.time.LocalDate.now();
+        java.time.Instant startOfDay = today.atStartOfDay(java.time.ZoneOffset.UTC).toInstant();
+        java.time.Instant endOfDay = today.plusDays(1).atStartOfDay(java.time.ZoneOffset.UTC).toInstant();
+
+        java.security.SecureRandom random = new java.security.SecureRandom();
+        String orderNumber;
+        do {
+            int num = random.nextInt(10000);
+            orderNumber = String.format("%04d", num);
+        } while (orderRepository.existsByMerchantIdAndOrderNumberAndCreatedAtBetween(merchantId, orderNumber, startOfDay, endOfDay));
+
         order.setOrderNumber(orderNumber);
+
+        Long currentBillSerial = merchant.getNextBillSerial() != null ? merchant.getNextBillSerial() : 0L;
+        order.setBillSerialNumber(currentBillSerial);
+        merchant.setNextBillSerial(currentBillSerial + 1);
+        merchantRepository.save(merchant);
 
         Order savedOrder = orderRepository.save(order);
 
@@ -508,6 +521,7 @@ public class OrderService {
         String formattedDate = ldt.format(java.time.format.DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm"));
 
         sb.append("Bill No : ").append(order.getOrderNumber()).append("\n");
+        sb.append("Bill Serial #").append(order.getBillSerialNumber() != null ? order.getBillSerialNumber() : 0).append("\n");
         sb.append("Date    : ").append(formattedDate).append("\n");
         sb.append("Cashier : ").append(order.getCreatedBy().getName()).append("\n");
         sb.append(doubleLine).append("\n");

@@ -52,4 +52,8 @@ public class Merchant extends BaseEntity {
     @Column(name = "active", nullable = false)
     @Builder.Default
     private Boolean active = true;
+
+    @Column(name = "next_bill_serial", nullable = false)
+    @Builder.Default
+    private Long nextBillSerial = 0L;
 }

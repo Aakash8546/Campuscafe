@@ -130,11 +130,12 @@ class OrderServiceTest {
         when(merchantRepository.findById(1L)).thenReturn(Optional.of(merchant));
         when(productRepository.findById(10L)).thenReturn(Optional.of(product));
         when(userRepository.findById(1L)).thenReturn(Optional.of(adminUser));
-        when(orderRepository.getNextOrderNumberSequence()).thenReturn(1001L);
+        when(orderRepository.existsByMerchantIdAndOrderNumberAndCreatedAtBetween(any(), any(), any(), any())).thenReturn(false);
 
         Order savedOrder = Order.builder()
                 .merchant(merchant)
-                .orderNumber("ORD-20260624-0001")
+                .orderNumber("0042")
+                .billSerialNumber(0L)
                 .status(OrderStatus.NEW)
                 .source(OrderSource.OFFLINE)
                 .subtotal(new BigDecimal("9.00"))
@@ -146,7 +147,8 @@ class OrderServiceTest {
 
         OrderResponse response = OrderResponse.builder()
                 .id(100L)
-                .orderNumber("ORD-20260624-0001")
+                .orderNumber("0042")
+                .billSerialNumber(0L)
                 .status("NEW")
                 .finalAmount(new BigDecimal("9.00"))
                 .build();
@@ -155,7 +157,8 @@ class OrderServiceTest {
         OrderResponse result = orderService.createOrder(request);
 
         assertNotNull(result);
-        assertEquals("ORD-20260624-0001", result.getOrderNumber());
+        assertEquals("0042", result.getOrderNumber());
+        assertEquals(0L, result.getBillSerialNumber());
         assertEquals("NEW", result.getStatus());
         assertEquals(new BigDecimal("9.00"), result.getFinalAmount());
 
@@ -180,11 +183,12 @@ class OrderServiceTest {
         when(productRepository.findById(10L)).thenReturn(Optional.of(product));
         when(productVariantRepository.findById(50L)).thenReturn(Optional.of(variant));
         when(userRepository.findById(1L)).thenReturn(Optional.of(adminUser));
-        when(orderRepository.getNextOrderNumberSequence()).thenReturn(1002L);
+        when(orderRepository.existsByMerchantIdAndOrderNumberAndCreatedAtBetween(any(), any(), any(), any())).thenReturn(false);
 
         Order savedOrder = Order.builder()
                 .merchant(merchant)
-                .orderNumber("ORD-20260624-0002")
+                .orderNumber("1589")
+                .billSerialNumber(1L)
                 .status(OrderStatus.NEW)
                 .source(OrderSource.OFFLINE)
                 .subtotal(new BigDecimal("12.00"))
@@ -196,7 +200,8 @@ class OrderServiceTest {
 
         OrderResponse response = OrderResponse.builder()
                 .id(101L)
-                .orderNumber("ORD-20260624-0002")
+                .orderNumber("1589")
+                .billSerialNumber(1L)
                 .status("NEW")
                 .finalAmount(new BigDecimal("12.00"))
                 .build();
@@ -205,7 +210,8 @@ class OrderServiceTest {
         OrderResponse result = orderService.createOrder(request);
 
         assertNotNull(result);
-        assertEquals("ORD-20260624-0002", result.getOrderNumber());
+        assertEquals("1589", result.getOrderNumber());
+        assertEquals(1L, result.getBillSerialNumber());
         assertEquals(new BigDecimal("12.00"), result.getFinalAmount());
 
         verify(orderRepository, times(1)).save(any(Order.class));

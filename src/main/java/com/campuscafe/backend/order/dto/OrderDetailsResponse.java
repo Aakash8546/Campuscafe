@@ -16,6 +16,7 @@ import java.util.List;
 public class OrderDetailsResponse {
     private Long id;
     private String orderNumber;
+    private Long billSerialNumber;
     private String status;
     private String priority;
     private String source;
