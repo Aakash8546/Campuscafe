@@ -55,4 +55,7 @@ public class OrderItem {
 
     @Column(name = "subtotal", nullable = false, precision = 12, scale = 2)
     private BigDecimal subtotal;
+
+    @Column(name = "instructions", length = 255)
+    private String instructions;
 }

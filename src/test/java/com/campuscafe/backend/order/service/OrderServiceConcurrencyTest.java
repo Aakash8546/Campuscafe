@@ -58,6 +58,9 @@ class OrderServiceConcurrencyTest {
     private NotificationRepository notificationRepository;
 
     @Mock
+    private com.campuscafe.backend.websocket.service.WebSocketService webSocketService;
+
+    @Mock
     private OrderMapper orderMapper;
 
     @InjectMocks

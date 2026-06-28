@@ -80,25 +80,14 @@ public class OrderController {
     }
 
     @PatchMapping("/{id}/status")
-    @PreAuthorize("hasAuthority('ORDER_UPDATE')")
-    @Operation(summary = "Update order status (NEW -> PREPARING -> READY -> COMPLETED)", description = "Enforces valid state machine flows. Requires ORDER_UPDATE.")
+    @PreAuthorize("hasAnyAuthority('ORDER_UPDATE', 'KOT_UPDATE')")
+    @Operation(summary = "Update order status", description = "Enforces valid state machine flows. Requires ORDER_UPDATE or KOT_UPDATE.")
     public ResponseEntity<ApiResponse<OrderResponse>> updateOrderStatus(
             @PathVariable Long id,
             @Valid @RequestBody UpdateOrderStatusRequest request
     ) {
         OrderResponse response = orderService.updateOrderStatus(id, request);
         return ResponseEntity.ok(ApiResponse.success("Order status updated successfully", response));
-    }
-
-    @PatchMapping("/{id}/priority")
-    @PreAuthorize("hasAuthority('ORDER_UPDATE')")
-    @Operation(summary = "Update order priority", description = "Only active orders can change priority. Completed and Cancelled cannot. Requires ORDER_UPDATE.")
-    public ResponseEntity<ApiResponse<OrderResponse>> updateOrderPriority(
-            @PathVariable Long id,
-            @Valid @RequestBody UpdateOrderPriorityRequest request
-    ) {
-        OrderResponse response = orderService.updateOrderPriority(id, request);
-        return ResponseEntity.ok(ApiResponse.success("Order priority updated successfully", response));
     }
 
     @GetMapping("/{id}/receipt")

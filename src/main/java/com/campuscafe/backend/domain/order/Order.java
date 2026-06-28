@@ -2,7 +2,6 @@ package com.campuscafe.backend.domain.order;
 
 import com.campuscafe.backend.domain.base.BaseEntity;
 import com.campuscafe.backend.domain.merchant.Merchant;
-import com.campuscafe.backend.domain.order.enums.OrderPriority;
 import com.campuscafe.backend.domain.order.enums.OrderSource;
 import com.campuscafe.backend.domain.order.enums.OrderStatus;
 import com.campuscafe.backend.domain.order.enums.PaymentMethod;
@@ -53,11 +52,6 @@ public class Order extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
     private OrderStatus status;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "priority", nullable = false, length = 20)
-    @Builder.Default
-    private OrderPriority priority = OrderPriority.MEDIUM;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "source", nullable = false, length = 20)

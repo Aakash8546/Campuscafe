@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.campuscafe.backend.integration.Phase8ControllerIntegrationTest
 -------------------------------------------------------------------------------
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.441 s -- in com.campuscafe.backend.integration.Phase8ControllerIntegrationTest
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.392 s -- in com.campuscafe.backend.integration.Phase8ControllerIntegrationTest

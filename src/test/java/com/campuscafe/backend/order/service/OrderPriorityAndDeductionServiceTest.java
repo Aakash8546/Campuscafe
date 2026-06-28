@@ -3,7 +3,6 @@ package com.campuscafe.backend.order.service;
 import com.campuscafe.backend.domain.merchant.Merchant;
 import com.campuscafe.backend.domain.order.Order;
 import com.campuscafe.backend.domain.order.OrderItem;
-import com.campuscafe.backend.domain.order.enums.OrderPriority;
 import com.campuscafe.backend.domain.order.enums.OrderSource;
 import com.campuscafe.backend.domain.order.enums.OrderStatus;
 import com.campuscafe.backend.domain.product.Product;
@@ -14,7 +13,6 @@ import com.campuscafe.backend.domain.inventory.enums.InventoryTransactionType;
 import com.campuscafe.backend.exception.*;
 import com.campuscafe.backend.order.dto.OrderBoardResponse;
 import com.campuscafe.backend.order.dto.OrderResponse;
-import com.campuscafe.backend.order.dto.UpdateOrderPriorityRequest;
 import com.campuscafe.backend.order.dto.UpdateOrderStatusRequest;
 import com.campuscafe.backend.order.mapper.OrderMapper;
 import com.campuscafe.backend.order.repository.OrderRepository;
@@ -24,6 +22,7 @@ import com.campuscafe.backend.inventory.repository.InventoryTransactionRepositor
 import com.campuscafe.backend.repository.NotificationRepository;
 import com.campuscafe.backend.repository.UserRepository;
 import com.campuscafe.backend.security.service.CustomUserDetails;
+import com.campuscafe.backend.websocket.service.WebSocketService;
 import com.campuscafe.backend.domain.user.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,8 +36,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,6 +63,9 @@ class OrderPriorityAndDeductionServiceTest {
 
     @Mock
     private NotificationRepository notificationRepository;
+
+    @Mock
+    private WebSocketService webSocketService;
 
     @Mock
     private OrderMapper orderMapper;
@@ -99,9 +99,8 @@ class OrderPriorityAndDeductionServiceTest {
 
         order = Order.builder()
                 .merchant(merchant)
-                .orderNumber("ORD-20260624-1001")
+                .orderNumber("0001")
                 .status(OrderStatus.READY)
-                .priority(OrderPriority.MEDIUM)
                 .source(OrderSource.OFFLINE)
                 .createdBy(adminUser)
                 .build();
@@ -124,38 +123,6 @@ class OrderPriorityAndDeductionServiceTest {
         SecurityContext securityContext = mock(SecurityContext.class);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
-    }
-
-    @Test
-    void testUpdateOrderPriority_Success() {
-        setupSecurityContext(adminUser);
-
-        UpdateOrderPriorityRequest request = UpdateOrderPriorityRequest.builder()
-                .priority("URGENT")
-                .build();
-
-        when(orderRepository.findById(200L)).thenReturn(Optional.of(order));
-        when(orderRepository.save(any(Order.class))).thenReturn(order);
-        when(orderMapper.toResponse(any(Order.class))).thenReturn(new OrderResponse());
-
-        OrderResponse result = orderService.updateOrderPriority(200L, request);
-
-        assertNotNull(result);
-        assertEquals(OrderPriority.URGENT, order.getPriority());
-    }
-
-    @Test
-    void testUpdateOrderPriority_CompletedOrder_ThrowsException() {
-        setupSecurityContext(adminUser);
-        order.setStatus(OrderStatus.COMPLETED);
-
-        UpdateOrderPriorityRequest request = UpdateOrderPriorityRequest.builder()
-                .priority("HIGH")
-                .build();
-
-        when(orderRepository.findById(200L)).thenReturn(Optional.of(order));
-
-        assertThrows(InvalidOrderStatusException.class, () -> orderService.updateOrderPriority(200L, request));
     }
 
     @Test
@@ -193,10 +160,9 @@ class OrderPriorityAndDeductionServiceTest {
 
         assertNotNull(response);
         assertEquals(OrderStatus.COMPLETED, order.getStatus());
-        
-        // Milk stock starts at 5.0, requires 2 * 0.50 = 1.0, so final is 4.0
+
         assertEquals(new BigDecimal("4.00"), inventoryItem.getCurrentStock());
-        
+
         verify(inventoryTransactionRepository, times(1)).save(any(InventoryTransaction.class));
     }
 
@@ -215,8 +181,7 @@ class OrderPriorityAndDeductionServiceTest {
         when(inventoryItemRepository.findById(20L)).thenReturn(Optional.of(inventoryItem));
 
         assertThrows(InsufficientInventoryException.class, () -> orderService.updateOrderStatus(200L, request));
-        
-        // Ensure status was not updated and repositories did not save changes
+
         assertNotEquals(OrderStatus.COMPLETED, order.getStatus());
         verify(inventoryItemRepository, never()).save(any(InventoryItem.class));
         verify(inventoryTransactionRepository, never()).save(any(InventoryTransaction.class));

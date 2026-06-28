@@ -25,7 +25,6 @@ import com.campuscafe.backend.repository.UserRepository;
 import com.campuscafe.backend.discount.repository.DiscountRepository;
 import com.campuscafe.backend.domain.discount.Discount;
 import com.campuscafe.backend.domain.discount.enums.DiscountType;
-import com.campuscafe.backend.domain.order.enums.OrderPriority;
 import com.campuscafe.backend.domain.order.enums.PaymentMethod;
 import com.campuscafe.backend.domain.merchant.enums.ShopStatus;
 import com.campuscafe.backend.repository.MerchantSettingRepository;
@@ -37,6 +36,7 @@ import com.campuscafe.backend.product.repository.ProductRecipeRepository;
 import com.campuscafe.backend.inventory.repository.InventoryItemRepository;
 import com.campuscafe.backend.inventory.repository.InventoryTransactionRepository;
 import com.campuscafe.backend.security.service.CustomUserDetails;
+import com.campuscafe.backend.websocket.service.WebSocketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -71,6 +71,7 @@ public class OrderService {
     private final InventoryItemRepository inventoryItemRepository;
     private final InventoryTransactionRepository inventoryTransactionRepository;
     private final MerchantSettingRepository merchantSettingRepository;
+    private final WebSocketService webSocketService;
 
     private final OrderMapper orderMapper;
 
@@ -102,15 +103,6 @@ public class OrderService {
             throw new InvalidOrderRequestException("Cannot place order because the shop is CLOSED");
         }
 
-        OrderPriority priority = OrderPriority.MEDIUM;
-        if (request.getPriority() != null) {
-            try {
-                priority = OrderPriority.valueOf(request.getPriority().toUpperCase());
-            } catch (IllegalArgumentException e) {
-                throw new InvalidOrderRequestException("Invalid priority value: " + request.getPriority());
-            }
-        }
-
         PaymentMethod paymentMethod = PaymentMethod.CASH;
         if (request.getPaymentMethod() != null) {
             try {
@@ -122,8 +114,7 @@ public class OrderService {
 
         Order order = Order.builder()
                 .merchant(merchant)
-                .status(OrderStatus.NEW)
-                .priority(priority)
+                .status(OrderStatus.PENDING)
                 .source(request.getSource() != null ? request.getSource() : OrderSource.OFFLINE)
                 .paymentMethod(paymentMethod)
                 .createdBy(getCurrentUserEntity(currentUser.getUserId()))
@@ -181,6 +172,7 @@ public class OrderService {
                     .quantity(itemReq.getQuantity())
                     .unitPrice(unitPrice)
                     .subtotal(itemSubtotal)
+                    .instructions(itemReq.getInstructions())
                     .build();
 
             orderItems.add(orderItem);
@@ -248,7 +240,11 @@ public class OrderService {
                 .build();
         notificationRepository.save(notification);
 
-        return orderMapper.toResponse(savedOrder);
+        OrderResponse response = orderMapper.toResponse(savedOrder);
+        webSocketService.broadcastKotUpdate(merchantId, orderMapper.toDetailsResponse(savedOrder));
+        webSocketService.broadcastCustomerDisplayUpdate(merchantId, response);
+
+        return response;
     }
 
     @Transactional(readOnly = true)
@@ -308,26 +304,48 @@ public class OrderService {
         }
 
         boolean isValid = false;
-        if (current == OrderStatus.NEW) {
-            isValid = (target == OrderStatus.PREPARING || target == OrderStatus.CANCELLED);
+        if (current == OrderStatus.PENDING || current == OrderStatus.NEW) {
+            isValid = (target == OrderStatus.PREPARING || target == OrderStatus.READY || target == OrderStatus.SERVED || target == OrderStatus.COMPLETED || target == OrderStatus.CANCELLED);
         } else if (current == OrderStatus.PREPARING) {
-            isValid = (target == OrderStatus.READY || target == OrderStatus.CANCELLED);
+            isValid = (target == OrderStatus.READY || target == OrderStatus.SERVED || target == OrderStatus.COMPLETED || target == OrderStatus.CANCELLED);
         } else if (current == OrderStatus.READY) {
-            isValid = (target == OrderStatus.COMPLETED || target == OrderStatus.CANCELLED);
+            isValid = (target == OrderStatus.SERVED || target == OrderStatus.COMPLETED || target == OrderStatus.CANCELLED);
         }
 
         if (!isValid) {
             throw new InvalidOrderTransitionException("Cannot transition order from " + current + " to " + target);
         }
 
-        if (target == OrderStatus.COMPLETED) {
+        if ((target == OrderStatus.SERVED || target == OrderStatus.COMPLETED) && (current != OrderStatus.SERVED && current != OrderStatus.COMPLETED)) {
             User userEntity = getCurrentUserEntity(currentUser.getUserId());
             deductInventoryForOrder(order, userEntity);
         }
 
         order.setStatus(target);
         Order updatedOrder = orderRepository.save(order);
-        return orderMapper.toResponse(updatedOrder);
+        OrderResponse response = orderMapper.toResponse(updatedOrder);
+
+        webSocketService.broadcastKotUpdate(merchantId, orderMapper.toDetailsResponse(updatedOrder));
+        webSocketService.broadcastCustomerDisplayUpdate(merchantId, response);
+
+        return response;
+    }
+
+    @Transactional(readOnly = true)
+    public List<OrderDetailsResponse> getActiveKotOrders() {
+        CustomUserDetails currentUser = getAuthenticatedUser();
+        Long merchantId = currentUser.getMerchantId();
+        List<Order> orders = orderRepository.findActiveOrdersSorted(merchantId, List.of(OrderStatus.PENDING, OrderStatus.NEW, OrderStatus.PREPARING, OrderStatus.READY));
+        return orders.stream().map(orderMapper::toDetailsResponse).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<OrderResponse> getPublicCustomerDisplayOrders(Long merchantId) {
+        if (merchantId == null) {
+            merchantId = 1L;
+        }
+        List<Order> orders = orderRepository.findActiveOrdersSorted(merchantId, List.of(OrderStatus.PENDING, OrderStatus.NEW, OrderStatus.PREPARING, OrderStatus.READY, OrderStatus.SERVED, OrderStatus.COMPLETED));
+        return orders.stream().map(orderMapper::toResponse).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -335,7 +353,7 @@ public class OrderService {
         CustomUserDetails currentUser = getAuthenticatedUser();
         Long merchantId = currentUser.getMerchantId();
 
-        List<Order> orders = orderRepository.findActiveOrdersSorted(merchantId, List.of(OrderStatus.NEW, OrderStatus.PREPARING, OrderStatus.READY));
+        List<Order> orders = orderRepository.findActiveOrdersSorted(merchantId, List.of(OrderStatus.PENDING, OrderStatus.NEW, OrderStatus.PREPARING, OrderStatus.READY));
 
         List<OrderResponse> newOrdersList = new ArrayList<>();
         List<OrderResponse> preparingList = new ArrayList<>();
@@ -343,7 +361,7 @@ public class OrderService {
 
         for (Order order : orders) {
             OrderResponse response = orderMapper.toResponse(order);
-            if (order.getStatus() == OrderStatus.NEW) {
+            if (order.getStatus() == OrderStatus.NEW || order.getStatus() == OrderStatus.PENDING) {
                 newOrdersList.add(response);
             } else if (order.getStatus() == OrderStatus.PREPARING) {
                 preparingList.add(response);
@@ -357,33 +375,6 @@ public class OrderService {
                 .preparing(preparingList)
                 .ready(readyList)
                 .build();
-    }
-
-    public OrderResponse updateOrderPriority(Long id, UpdateOrderPriorityRequest request) {
-        CustomUserDetails currentUser = getAuthenticatedUser();
-        Long merchantId = currentUser.getMerchantId();
-
-        Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + id));
-
-        if (!order.getMerchant().getId().equals(merchantId)) {
-            throw new AccessDeniedException("You do not have access to this order");
-        }
-
-        if (order.getStatus() == OrderStatus.COMPLETED || order.getStatus() == OrderStatus.CANCELLED) {
-            throw new InvalidOrderStatusException("Cannot change priority of completed or cancelled orders");
-        }
-
-        OrderPriority priority;
-        try {
-            priority = OrderPriority.valueOf(request.getPriority().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new InvalidOrderStatusException("Invalid priority value: " + request.getPriority());
-        }
-
-        order.setPriority(priority);
-        Order updated = orderRepository.save(order);
-        return orderMapper.toResponse(updated);
     }
 
     private void deductInventoryForOrder(Order order, User userEntity) {
@@ -583,6 +574,44 @@ public class OrderService {
         sb.append(doubleLine).append("\n");
         sb.append(center.apply("Thank you for your visit!")).append("\n");
         sb.append(center.apply("Please visit us again!")).append("\n");
+        sb.append(doubleLine).append("\n\n");
+
+        // Section 2: CAFE COPY (KOT SECTION)
+        sb.append("\n").append(center.apply("--- CUT HERE ---")).append("\n\n");
+        sb.append(doubleLine).append("\n");
+        sb.append(center.apply("KITCHEN ORDER TICKET (KOT)")).append("\n");
+        sb.append(center.apply("(CAFE COPY)")).append("\n");
+        sb.append(center.apply(setting.getBusinessName().toUpperCase())).append("\n");
+        sb.append(doubleLine).append("\n");
+        sb.append("Order No: ").append(order.getOrderNumber()).append("\n");
+        sb.append("Bill Serial #").append(order.getBillSerialNumber() != null ? order.getBillSerialNumber() : 0).append("\n");
+        sb.append("Date    : ").append(formattedDate).append("\n");
+        sb.append(doubleLine).append("\n");
+
+        if (width == 32) {
+            sb.append(String.format("%-25s %4s", "Item", "Qty")).append("\n");
+        } else {
+            sb.append(String.format("%-38s %8s", "Item", "Qty")).append("\n");
+        }
+        sb.append(singleLine).append("\n");
+
+        for (OrderItem item : order.getItems()) {
+            String name = item.getProduct().getName();
+            if (item.getVariantName() != null && !item.getVariantName().isBlank()) {
+                name = name + " (" + item.getVariantName() + ")";
+            }
+            if (name.length() > (width == 32 ? 25 : 38)) {
+                name = name.substring(0, (width == 32 ? 22 : 35)) + "...";
+            }
+            if (width == 32) {
+                sb.append(String.format("%-25s %4d", name, item.getQuantity())).append("\n");
+            } else {
+                sb.append(String.format("%-38s %8d", name, item.getQuantity())).append("\n");
+            }
+            if (item.getInstructions() != null && !item.getInstructions().isBlank()) {
+                sb.append("  * Note: ").append(item.getInstructions()).append("\n");
+            }
+        }
         sb.append(doubleLine).append("\n");
 
         return sb.toString();

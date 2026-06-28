@@ -41,13 +41,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
     @Query(value = "SELECT nextval('order_number_sequence')", nativeQuery = true)
     Long getNextOrderNumberSequence();
 
-    @Query("SELECT o FROM Order o WHERE o.merchant.id = :merchantId AND o.status IN :statuses " +
-           "ORDER BY CASE o.priority " +
-           "  WHEN com.campuscafe.backend.domain.order.enums.OrderPriority.URGENT THEN 1 " +
-           "  WHEN com.campuscafe.backend.domain.order.enums.OrderPriority.HIGH THEN 2 " +
-           "  WHEN com.campuscafe.backend.domain.order.enums.OrderPriority.MEDIUM THEN 3 " +
-           "  WHEN com.campuscafe.backend.domain.order.enums.OrderPriority.LOW THEN 4 " +
-           "  ELSE 5 END ASC, o.createdAt ASC")
+    @Query("SELECT o FROM Order o WHERE o.merchant.id = :merchantId AND o.status IN :statuses ORDER BY o.createdAt ASC")
     List<Order> findActiveOrdersSorted(
             @Param("merchantId") Long merchantId,
             @Param("statuses") List<OrderStatus> statuses

@@ -41,6 +41,9 @@ public class SecurityConfig {
                     "/auth/forgot-password",
                     "/auth/reset-password",
                     "/auth/resend-otp",
+                    "/orders/public/**",
+                    "/ws-kot",
+                    "/ws-kot/**",
                     "/swagger-ui/**",
                     "/v3/api-docs/**"
                 ).permitAll()

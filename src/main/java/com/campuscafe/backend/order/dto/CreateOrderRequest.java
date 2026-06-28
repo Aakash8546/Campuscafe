@@ -18,8 +18,6 @@ public class CreateOrderRequest {
 
     private OrderSource source;
 
-    private String priority;
-
     private Long discountId;
 
     private String paymentMethod;

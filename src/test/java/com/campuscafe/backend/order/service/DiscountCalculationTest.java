@@ -65,6 +65,9 @@ class DiscountCalculationTest {
     private DiscountRepository discountRepository;
 
     @Mock
+    private com.campuscafe.backend.websocket.service.WebSocketService webSocketService;
+
+    @Mock
     private OrderMapper orderMapper;
 
     @InjectMocks

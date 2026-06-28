@@ -15,7 +15,6 @@ com/campuscafe/backend/report/dto/InventoryReportResponse.class
 com/campuscafe/backend/product/dto/UpdateProductRequest.class
 com/campuscafe/backend/order/dto/OrderResponse.class
 com/campuscafe/backend/domain/discount/Discount$DiscountBuilder.class
-com/campuscafe/backend/domain/order/enums/OrderPriority.class
 com/campuscafe/backend/domain/user/RefreshToken.class
 com/campuscafe/backend/security/config/SecurityConfig.class
 com/campuscafe/backend/user/dto/UpdateUserRequest$UpdateUserRequestBuilder.class
@@ -28,7 +27,6 @@ com/campuscafe/backend/inventory/dto/InventoryItemSummaryResponse$InventoryItemS
 com/campuscafe/backend/inventory/dto/InventoryDashboardResponse.class
 com/campuscafe/backend/exception/DuplicateInventoryItemException.class
 com/campuscafe/backend/exception/UserInactiveException.class
-com/campuscafe/backend/order/dto/UpdateOrderPriorityRequest.class
 com/campuscafe/backend/exception/ProductUnavailableException.class
 com/campuscafe/backend/product/controller/ProductRecipeController.class
 com/campuscafe/backend/exception/InvalidOrderRequestException.class
@@ -55,12 +53,12 @@ com/campuscafe/backend/config/JpaAuditingConfig.class
 com/campuscafe/backend/settings/dto/MerchantSettingResponse.class
 com/campuscafe/backend/inventory/dto/UpdateInventoryItemRequest$UpdateInventoryItemRequestBuilder.class
 com/campuscafe/backend/inventory/repository/InventoryTransactionRepository.class
+com/campuscafe/backend/customer/controller/CustomerDisplayController.class
 com/campuscafe/backend/settings/dto/MerchantSettingResponse$MerchantSettingResponseBuilder.class
 com/campuscafe/backend/repository/MerchantRepository.class
 com/campuscafe/backend/product/dto/ProductSummaryResponse$ProductSummaryResponseBuilder.class
 com/campuscafe/backend/order/repository/OrderRepository.class
 com/campuscafe/backend/mail/service/SmtpEmailService.class
-com/campuscafe/backend/order/dto/UpdateOrderPriorityRequest$UpdateOrderPriorityRequestBuilder.class
 com/campuscafe/backend/auth/dto/LogoutRequest.class
 com/campuscafe/backend/product/dto/UpdateProductRequest$UpdateProductRequestBuilder.class
 com/campuscafe/backend/report/dto/CategoryPerformanceResponse.class
@@ -69,6 +67,7 @@ com/campuscafe/backend/notification/service/NotificationService.class
 com/campuscafe/backend/domain/inventory/InventoryItem.class
 com/campuscafe/backend/settings/mapper/MerchantSettingMapper.class
 com/campuscafe/backend/product/dto/CreateProductRequest.class
+com/campuscafe/backend/kot/controller/KotController.class
 com/campuscafe/backend/domain/order/OrderItem.class
 com/campuscafe/backend/settings/dto/UpdateMerchantSettingRequest.class
 com/campuscafe/backend/exception/OtpExpiredException.class
@@ -183,6 +182,7 @@ com/campuscafe/backend/repository/RoleRepository.class
 com/campuscafe/backend/inventory/dto/InventoryTransactionResponse$InventoryTransactionResponseBuilder.class
 com/campuscafe/backend/security/filter/JwtAuthenticationFilter.class
 com/campuscafe/backend/user/dto/UserSummaryResponse.class
+com/campuscafe/backend/config/WebSocketConfig.class
 com/campuscafe/backend/dashboard/dto/LowStockItemResponse$LowStockItemResponseBuilder.class
 com/campuscafe/backend/product/repository/ProductVariantRepository.class
 com/campuscafe/backend/dashboard/dto/SalesOverviewResponse.class
@@ -258,6 +258,7 @@ com/campuscafe/backend/inventory/dto/InventoryItemSummaryResponse.class
 com/campuscafe/backend/report/dto/MonthlySalesReportResponse$MonthlySalesReportResponseBuilder.class
 com/campuscafe/backend/domain/notification/enums/NotificationType.class
 com/campuscafe/backend/dashboard/dto/LowStockItemResponse.class
+com/campuscafe/backend/websocket/service/WebSocketService.class
 com/campuscafe/backend/discount/service/DiscountService.class
 com/campuscafe/backend/domain/order/enums/OrderStatus.class
 com/campuscafe/backend/domain/inventory/InventoryTransaction$InventoryTransactionBuilder.class

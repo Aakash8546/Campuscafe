@@ -23,6 +23,8 @@
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/common/GlobalExceptionHandler.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/config/JpaAuditingConfig.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/config/OpenApiConfig.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/config/WebSocketConfig.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/customer/controller/CustomerDisplayController.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/dashboard/controller/DashboardController.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/dashboard/dto/DashboardSummaryResponse.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/dashboard/dto/LowStockItemResponse.java
@@ -56,7 +58,6 @@
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/notification/enums/NotificationType.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/order/Order.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/order/OrderItem.java
-/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/order/enums/OrderPriority.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/order/enums/OrderSource.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/order/enums/OrderStatus.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/domain/order/enums/PaymentMethod.java
@@ -130,6 +131,7 @@
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/inventory/service/InventoryCategoryService.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/inventory/service/InventoryItemService.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/inventory/specification/InventoryItemSpecification.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/kot/controller/KotController.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/mail/config/EmailProperties.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/mail/config/MailConfiguration.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/mail/exception/EmailSendFailedException.java
@@ -148,7 +150,6 @@
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/order/dto/OrderItemRequest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/order/dto/OrderItemResponse.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/order/dto/OrderResponse.java
-/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/order/dto/UpdateOrderPriorityRequest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/order/dto/UpdateOrderStatusRequest.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/order/mapper/OrderMapper.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/order/repository/OrderItemRepository.java
@@ -207,3 +208,4 @@
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/user/dto/UserSummaryResponse.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/user/mapper/UserMapper.java
 /Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/user/service/UserService.java
+/Users/aakashsrivastava/Desktop/campus-cafe/src/main/java/com/campuscafe/backend/websocket/service/WebSocketService.java

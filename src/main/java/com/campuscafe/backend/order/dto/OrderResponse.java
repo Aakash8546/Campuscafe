@@ -17,7 +17,6 @@ public class OrderResponse {
     private String orderNumber;
     private Long billSerialNumber;
     private String status;
-    private String priority;
     private String source;
     private BigDecimal subtotal;
     private BigDecimal discountAmount;

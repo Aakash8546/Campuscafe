@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-06-28T12:07:22+0530",
+    date = "2026-06-28T13:36:02+0530",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.12 (Oracle Corporation)"
 )
 @Component
@@ -34,9 +34,6 @@ public class OrderMapperImpl implements OrderMapper {
         orderResponse.billSerialNumber( order.getBillSerialNumber() );
         if ( order.getStatus() != null ) {
             orderResponse.status( order.getStatus().name() );
-        }
-        if ( order.getPriority() != null ) {
-            orderResponse.priority( order.getPriority().name() );
         }
         if ( order.getSource() != null ) {
             orderResponse.source( order.getSource().name() );
@@ -67,9 +64,6 @@ public class OrderMapperImpl implements OrderMapper {
         orderDetailsResponse.billSerialNumber( order.getBillSerialNumber() );
         if ( order.getStatus() != null ) {
             orderDetailsResponse.status( order.getStatus().name() );
-        }
-        if ( order.getPriority() != null ) {
-            orderDetailsResponse.priority( order.getPriority().name() );
         }
         if ( order.getSource() != null ) {
             orderDetailsResponse.source( order.getSource().name() );
@@ -103,6 +97,7 @@ public class OrderMapperImpl implements OrderMapper {
         orderItemResponse.quantity( item.getQuantity() );
         orderItemResponse.unitPrice( item.getUnitPrice() );
         orderItemResponse.subtotal( item.getSubtotal() );
+        orderItemResponse.instructions( item.getInstructions() );
 
         return orderItemResponse.build();
     }
