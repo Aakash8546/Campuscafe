@@ -37,7 +37,7 @@ public class MailConfiguration {
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
-        props.put("mail.debug", "true");
+        props.put("mail.debug", String.valueOf(Boolean.TRUE.equals(emailProperties.getDebug())));
         
         // Prevent infinite hanging by setting 5-second socket timeouts
         props.put("mail.smtp.connectiontimeout", "5000");

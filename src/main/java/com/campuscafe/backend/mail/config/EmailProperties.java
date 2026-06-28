@@ -34,4 +34,7 @@ public class EmailProperties {
 
     @Value("${mail.smtp.port:587}")
     private Integer port;
+
+    @Value("${mail.smtp.debug:false}")
+    private Boolean debug;
 }
