@@ -6,7 +6,7 @@ server:
 application:
   security:
     jwt:
-      secret-key: ${JWT_SECRET_KEY:9a6747fc6259aa374ab4e1bb2a0918dd2199978e5f19e6eef5a070514e21a2f9}
+      secret-key: ${JWT_SECRET_KEY}
 
 spring:
   datasource:
