@@ -11,6 +11,7 @@ import com.campuscafe.backend.exception.*;
 import com.campuscafe.backend.repository.*;
 import com.campuscafe.backend.security.service.CustomUserDetails;
 import com.campuscafe.backend.security.service.JwtService;
+import com.campuscafe.backend.security.service.LoginAttemptService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
@@ -41,6 +42,7 @@ public class AuthService {
     private final Environment environment;
     private final EmailService emailService;
     private final EmailProperties emailProperties;
+    private final LoginAttemptService loginAttemptService;
 
     private final SecureRandom secureRandom = new SecureRandom();
 
@@ -124,6 +126,11 @@ public class AuthService {
 
     @Transactional
     public LoginResponse login(LoginRequest request) {
+        if (loginAttemptService.isBlocked(request.getEmail())) {
+            long remainingMinutes = loginAttemptService.getRemainingLockMinutes(request.getEmail());
+            throw new AccountLockedException("Account is temporarily locked due to multiple failed login attempts. Please try again after " + remainingMinutes + " minutes.");
+        }
+
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UserNotFoundException("User not found with email: " + request.getEmail()));
 
@@ -136,8 +143,11 @@ public class AuthService {
         }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            loginAttemptService.loginFailed(request.getEmail());
             throw new InvalidCredentialsException("Invalid credentials");
         }
+
+        loginAttemptService.loginSucceeded(request.getEmail());
 
         CustomUserDetails userDetails = new CustomUserDetails(user);
         String accessToken = jwtService.generateAccessToken(userDetails);
@@ -158,6 +168,19 @@ public class AuthService {
                 .role(user.getRole().getName())
                 .merchantId(user.getMerchant().getId())
                 .build();
+    }
+
+    @Transactional
+    public void changePassword(Long userId, ChangePasswordRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new InvalidCredentialsException("Current password is incorrect");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 
     @Transactional(readOnly = true)

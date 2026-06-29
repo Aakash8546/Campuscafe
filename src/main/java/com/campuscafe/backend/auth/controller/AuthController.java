@@ -78,4 +78,14 @@ public class AuthController {
         authService.resetPassword(request);
         return ResponseEntity.ok(ApiResponse.success("Password reset successful. You can now login with your new password.", null));
     }
+
+    @PostMapping("/change-password")
+    @Operation(summary = "Securely change password for authenticated user")
+    public ResponseEntity<ApiResponse<Void>> changePassword(
+            @org.springframework.security.core.annotation.AuthenticationPrincipal com.campuscafe.backend.security.service.CustomUserDetails userDetails,
+            @Valid @RequestBody ChangePasswordRequest request
+    ) {
+        authService.changePassword(userDetails.getUserId(), request);
+        return ResponseEntity.ok(ApiResponse.success("Password changed successfully", null));
+    }
 }

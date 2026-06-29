@@ -94,6 +94,12 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.failure(ex.getMessage(), List.of(ex.getMessage())));
     }
 
+    @ExceptionHandler(com.campuscafe.backend.exception.AccountLockedException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAccountLocked(com.campuscafe.backend.exception.AccountLockedException ex) {
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                .body(ApiResponse.failure("Account Locked", List.of(ex.getMessage())));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Void>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         List<String> errors = ex.getBindingResult()
