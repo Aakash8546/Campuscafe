@@ -30,7 +30,8 @@ import static org.mockito.Mockito.*;
     "mail.smtp.otp-expiry-minutes=5",
     "spring.datasource.url=jdbc:postgresql://localhost:5432/campus_cafe",
     "spring.datasource.username=postgres",
-    "spring.datasource.password=postgres"
+    "spring.datasource.password=postgres",
+    "application.security.jwt.secret-key=9a6747fc6259aa374ab4e1bb2a0918dd2199978e5f19e6eef5a070514e21a2f9"
 })
 class AuthServiceEmailIntegrationTest {
 

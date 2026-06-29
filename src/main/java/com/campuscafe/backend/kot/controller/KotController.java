@@ -28,7 +28,7 @@ public class KotController {
     private final OrderService orderService;
 
     @GetMapping("/active")
-    @PreAuthorize("hasAnyAuthority('KOT_VIEW', 'ORDER_VIEW')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'KITCHEN_STAFF') or hasAnyAuthority('KOT_VIEW', 'ORDER_VIEW')")
     @Operation(summary = "Get active KOT tickets", description = "Accessible by ADMIN, MANAGER, and KITCHEN_STAFF.")
     public ResponseEntity<ApiResponse<List<OrderDetailsResponse>>> getActiveKotOrders() {
         List<OrderDetailsResponse> response = orderService.getActiveKotOrders();
@@ -36,7 +36,7 @@ public class KotController {
     }
 
     @PatchMapping("/{id}/status")
-    @PreAuthorize("hasAnyAuthority('KOT_UPDATE', 'ORDER_UPDATE')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'KITCHEN_STAFF') or hasAnyAuthority('KOT_UPDATE', 'ORDER_UPDATE')")
     @Operation(summary = "Update KOT ticket status", description = "Supported flow: PENDING -> PREPARING -> READY -> SERVED. Accessible by ADMIN, MANAGER, and KITCHEN_STAFF.")
     public ResponseEntity<ApiResponse<OrderResponse>> updateKotStatus(
             @PathVariable Long id,

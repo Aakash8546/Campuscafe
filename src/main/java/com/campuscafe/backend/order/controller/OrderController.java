@@ -31,7 +31,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ORDER_CREATE')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'CASHIER') or hasAuthority('ORDER_CREATE')")
     @Operation(summary = "Checkout and create a new order", description = "Direct billing screen call. Requires ORDER_CREATE.")
     public ResponseEntity<ApiResponse<OrderResponse>> createOrder(
             @Valid @RequestBody CreateOrderRequest request
@@ -41,7 +41,7 @@ public class OrderController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ORDER_VIEW')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'CASHIER', 'KITCHEN_STAFF') or hasAuthority('ORDER_VIEW')")
     @Operation(summary = "Get filtered and paginated order listings", description = "Requires ORDER_VIEW.")
     public ResponseEntity<ApiResponse<Page<OrderResponse>>> getOrders(
             @RequestParam(required = false) OrderStatus status,
@@ -56,7 +56,7 @@ public class OrderController {
     }
 
     @GetMapping("/board")
-    @PreAuthorize("hasAuthority('ORDER_VIEW')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'CASHIER', 'KITCHEN_STAFF') or hasAuthority('ORDER_VIEW')")
     @Operation(summary = "Get active orders structured for Kanban board", description = "Requires ORDER_VIEW.")
     public ResponseEntity<ApiResponse<OrderBoardResponse>> getOrderBoard() {
         OrderBoardResponse response = orderService.getOrderBoard();
@@ -64,7 +64,7 @@ public class OrderController {
     }
 
     @GetMapping("/dashboard")
-    @PreAuthorize("hasAuthority('ORDER_VIEW')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER') or hasAuthority('ORDER_VIEW')")
     @Operation(summary = "Get dashboard metrics for today's sales and queue backlogs", description = "Requires ORDER_VIEW.")
     public ResponseEntity<ApiResponse<OrderDashboardResponse>> getDashboardMetrics() {
         OrderDashboardResponse response = orderService.getDashboardMetrics();
@@ -72,7 +72,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ORDER_VIEW')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'CASHIER', 'KITCHEN_STAFF') or hasAuthority('ORDER_VIEW')")
     @Operation(summary = "Get complete order and order item details by ID", description = "Requires ORDER_VIEW.")
     public ResponseEntity<ApiResponse<OrderDetailsResponse>> getOrderById(@PathVariable Long id) {
         OrderDetailsResponse response = orderService.getOrderById(id);
@@ -80,7 +80,7 @@ public class OrderController {
     }
 
     @PatchMapping("/{id}/status")
-    @PreAuthorize("hasAnyAuthority('ORDER_UPDATE', 'KOT_UPDATE')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'CASHIER', 'KITCHEN_STAFF') or hasAnyAuthority('ORDER_UPDATE', 'KOT_UPDATE')")
     @Operation(summary = "Update order status", description = "Enforces valid state machine flows. Requires ORDER_UPDATE or KOT_UPDATE.")
     public ResponseEntity<ApiResponse<OrderResponse>> updateOrderStatus(
             @PathVariable Long id,
@@ -91,7 +91,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}/receipt")
-    @PreAuthorize("hasAuthority('ORDER_VIEW')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'CASHIER') or hasAuthority('ORDER_VIEW')")
     @Operation(summary = "Get plain text thermal printer formatted receipt", description = "Requires ORDER_VIEW.")
     public ResponseEntity<String> getReceiptText(@PathVariable Long id) {
         String receipt = orderService.getReceiptText(id);
