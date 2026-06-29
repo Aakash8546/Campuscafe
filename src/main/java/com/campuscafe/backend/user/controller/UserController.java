@@ -16,6 +16,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import com.campuscafe.backend.auth.dto.UserLoginLogResponse;
+import com.campuscafe.backend.auth.service.UserLoginLogService;
+import com.campuscafe.backend.security.service.CustomUserDetails;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 import java.util.List;
 
 @RestController
@@ -27,6 +35,18 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final UserLoginLogService userLoginLogService;
+
+    @GetMapping("/login-logs")
+    @PreAuthorize("hasAuthority('USER_VIEW')")
+    @Operation(summary = "Get employee login history and audit logs", description = "Accessible by ADMIN and MANAGER.")
+    public ResponseEntity<ApiResponse<Page<UserLoginLogResponse>>> getLoginLogs(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @ParameterObject Pageable pageable
+    ) {
+        Page<UserLoginLogResponse> response = userLoginLogService.getLoginLogs(userDetails.getMerchantId(), pageable);
+        return ResponseEntity.ok(ApiResponse.success("Login audit logs retrieved successfully", response));
+    }
 
     @PostMapping
     @PreAuthorize("hasAuthority('USER_CREATE')")

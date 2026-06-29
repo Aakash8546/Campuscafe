@@ -13,6 +13,7 @@ import com.campuscafe.backend.user.dto.UpdateUserRequest;
 import com.campuscafe.backend.user.dto.UserResponse;
 import com.campuscafe.backend.user.dto.UserSummaryResponse;
 import com.campuscafe.backend.user.service.UserService;
+import com.campuscafe.backend.auth.service.UserLoginLogService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,6 +52,9 @@ class UserControllerIntegrationTest {
 
     @MockBean
     private UserService userService;
+
+    @MockBean
+    private UserLoginLogService userLoginLogService;
 
     @MockBean
     private JwtService jwtService;
@@ -202,5 +206,23 @@ class UserControllerIntegrationTest {
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.success").value(false))
                 .andExpect(jsonPath("$.message").value("Access denied"));
+    }
+
+    @Test
+    void testGetLoginLogs_Success() throws Exception {
+        com.campuscafe.backend.auth.dto.UserLoginLogResponse logDto = com.campuscafe.backend.auth.dto.UserLoginLogResponse.builder()
+                .id(1L)
+                .email("admin@test.com")
+                .status(com.campuscafe.backend.domain.user.LoginStatus.SUCCESS)
+                .build();
+
+        org.springframework.data.domain.Page<com.campuscafe.backend.auth.dto.UserLoginLogResponse> page = new org.springframework.data.domain.PageImpl<>(List.of(logDto));
+        when(userLoginLogService.getLoginLogs(anyLong(), any(org.springframework.data.domain.Pageable.class))).thenReturn(page);
+
+        mockMvc.perform(get("/users/login-logs")
+                        .with(user(adminPrincipal)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.content[0].email").value("admin@test.com"));
     }
 }

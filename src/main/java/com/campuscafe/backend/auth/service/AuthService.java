@@ -21,6 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.campuscafe.backend.mail.config.EmailProperties;
 import com.campuscafe.backend.mail.service.EmailService;
 
+import com.campuscafe.backend.domain.user.LoginStatus;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Arrays;
@@ -43,6 +50,7 @@ public class AuthService {
     private final EmailService emailService;
     private final EmailProperties emailProperties;
     private final LoginAttemptService loginAttemptService;
+    private final UserLoginLogService userLoginLogService;
 
     private final SecureRandom secureRandom = new SecureRandom();
 
@@ -126,28 +134,40 @@ public class AuthService {
 
     @Transactional
     public LoginResponse login(LoginRequest request) {
+        String ipAddress = getClientIp();
+        String userAgent = getUserAgent();
+
         if (loginAttemptService.isBlocked(request.getEmail())) {
             long remainingMinutes = loginAttemptService.getRemainingLockMinutes(request.getEmail());
+            userLoginLogService.recordLog(null, null, request.getEmail(), ipAddress, userAgent, LoginStatus.BLOCKED, "Account temporarily locked");
             throw new AccountLockedException("Account is temporarily locked due to multiple failed login attempts. Please try again after " + remainingMinutes + " minutes.");
         }
 
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + request.getEmail()));
+        User user = userRepository.findByEmail(request.getEmail()).orElse(null);
+        if (user == null) {
+            userLoginLogService.recordLog(null, null, request.getEmail(), ipAddress, userAgent, LoginStatus.FAILED, "User not found");
+            throw new UserNotFoundException("User not found with email: " + request.getEmail());
+        }
 
-        if (!user.getMerchant().getVerified()) {
+        Merchant merchant = user.getMerchant();
+        if (!merchant.getVerified()) {
+            userLoginLogService.recordLog(merchant, user, request.getEmail(), ipAddress, userAgent, LoginStatus.FAILED, "Merchant account not verified");
             throw new MerchantNotVerifiedException("Merchant account is not verified");
         }
 
-        if (!user.getActive() || !user.getMerchant().getActive()) {
+        if (!user.getActive() || !merchant.getActive()) {
+            userLoginLogService.recordLog(merchant, user, request.getEmail(), ipAddress, userAgent, LoginStatus.FAILED, "Account is deactivated");
             throw new InvalidCredentialsException("Account is deactivated");
         }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             loginAttemptService.loginFailed(request.getEmail());
+            userLoginLogService.recordLog(merchant, user, request.getEmail(), ipAddress, userAgent, LoginStatus.FAILED, "Invalid credentials");
             throw new InvalidCredentialsException("Invalid credentials");
         }
 
         loginAttemptService.loginSucceeded(request.getEmail());
+        userLoginLogService.recordLog(merchant, user, request.getEmail(), ipAddress, userAgent, LoginStatus.SUCCESS, null);
 
         CustomUserDetails userDetails = new CustomUserDetails(user);
         String accessToken = jwtService.generateAccessToken(userDetails);
@@ -166,8 +186,36 @@ public class AuthService {
                 .accessToken(accessToken)
                 .refreshToken(refreshTokenString)
                 .role(user.getRole().getName())
-                .merchantId(user.getMerchant().getId())
+                .merchantId(merchant.getId())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<UserLoginLogResponse> getLoginLogs(Long merchantId, Pageable pageable) {
+        return userLoginLogService.getLoginLogs(merchantId, pageable);
+    }
+
+    private String getClientIp() {
+        ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attrs != null) {
+            HttpServletRequest request = attrs.getRequest();
+            String xfHeader = request.getHeader("X-Forwarded-For");
+            if (xfHeader == null || xfHeader.isEmpty()) {
+                return request.getRemoteAddr();
+            }
+            return xfHeader.split(",")[0].trim();
+        }
+        return "127.0.0.1";
+    }
+
+    private String getUserAgent() {
+        ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attrs != null) {
+            HttpServletRequest request = attrs.getRequest();
+            String ua = request.getHeader("User-Agent");
+            return ua != null ? (ua.length() > 255 ? ua.substring(0, 255) : ua) : "Unknown";
+        }
+        return "Unknown";
     }
 
     @Transactional
