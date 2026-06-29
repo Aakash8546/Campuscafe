@@ -37,7 +37,14 @@ logging:
     org.springframework.web: WARN
     org.hibernate.SQL: ERROR
     org.hibernate.orm.jdbc.bind: ERROR
+    org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer: ERROR
 
 mail:
   smtp:
     debug: false
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

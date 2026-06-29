@@ -27,6 +27,8 @@ spring:
       write-dates-as-timestamps: false
     deserialization:
       fail-on-unknown-properties: false
+  jpa:
+    open-in-view: false
 
 application:
   security:

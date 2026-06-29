@@ -89,6 +89,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user.getActive() && user.getMerchant().getActive();
+        return user.getActive() && user.getMerchant() != null && user.getMerchant().getActive();
     }
 }

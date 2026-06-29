@@ -50,4 +50,11 @@ public class LoginAttemptService {
         }
         return 0;
     }
+
+    @org.springframework.scheduling.annotation.Scheduled(fixedDelay = 1800000)
+    public void cleanupExpiredLocks() {
+        Instant now = Instant.now();
+        lockTimeCache.entrySet().removeIf(entry -> now.isAfter(entry.getValue()));
+        attemptsCache.keySet().removeIf(key -> !lockTimeCache.containsKey(key));
+    }
 }

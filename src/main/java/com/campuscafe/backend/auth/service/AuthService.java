@@ -14,14 +14,18 @@ import com.campuscafe.backend.security.service.JwtService;
 import com.campuscafe.backend.security.service.LoginAttemptService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.campuscafe.backend.mail.config.EmailProperties;
 import com.campuscafe.backend.mail.service.EmailService;
-
 import com.campuscafe.backend.domain.user.LoginStatus;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,7 +56,34 @@ public class AuthService {
     private final LoginAttemptService loginAttemptService;
     private final UserLoginLogService userLoginLogService;
 
+    @Value("${application.security.jwt.refresh-token.expiration:604800000}")
+    private long refreshExpiration;
+
     private final SecureRandom secureRandom = new SecureRandom();
+
+    private String hashToken(String token) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = digest.digest(token.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("SHA-256 algorithm not available", e);
+        }
+    }
+
+    private void invalidatePreviousOtps(String email, VerificationPurpose purpose) {
+        try {
+            verificationTokenRepository.invalidateActiveTokens(email, purpose, Instant.now());
+        } catch (Exception e) {
+            log.error("Failed to invalidate previous active OTPs for email: {} and purpose: {}", email, purpose, e);
+        }
+    }
 
     @Transactional
     public Map<String, String> signup(SignupRequest request) {
@@ -87,6 +118,7 @@ public class AuthService {
         userRepository.save(user);
 
 
+        invalidatePreviousOtps(request.getEmail(), VerificationPurpose.EMAIL_VERIFICATION);
         String otp = generateOtp();
 
 
@@ -145,11 +177,16 @@ public class AuthService {
 
         User user = userRepository.findByEmail(request.getEmail()).orElse(null);
         if (user == null) {
-            userLoginLogService.recordLog(null, null, request.getEmail(), ipAddress, userAgent, LoginStatus.FAILED, "User not found");
-            throw new UserNotFoundException("User not found with email: " + request.getEmail());
+            userLoginLogService.recordLog(null, null, request.getEmail(), ipAddress, userAgent, LoginStatus.FAILED, "Invalid credentials");
+            throw new InvalidCredentialsException("Invalid email or password");
         }
 
         Merchant merchant = user.getMerchant();
+        if (merchant == null) {
+            userLoginLogService.recordLog(null, user, request.getEmail(), ipAddress, userAgent, LoginStatus.FAILED, "Merchant account not found");
+            throw new InvalidCredentialsException("Invalid email or password");
+        }
+
         if (!merchant.getVerified()) {
             userLoginLogService.recordLog(merchant, user, request.getEmail(), ipAddress, userAgent, LoginStatus.FAILED, "Merchant account not verified");
             throw new MerchantNotVerifiedException("Merchant account is not verified");
@@ -163,7 +200,7 @@ public class AuthService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             loginAttemptService.loginFailed(request.getEmail());
             userLoginLogService.recordLog(merchant, user, request.getEmail(), ipAddress, userAgent, LoginStatus.FAILED, "Invalid credentials");
-            throw new InvalidCredentialsException("Invalid credentials");
+            throw new InvalidCredentialsException("Invalid email or password");
         }
 
         loginAttemptService.loginSucceeded(request.getEmail());
@@ -173,11 +210,12 @@ public class AuthService {
         String accessToken = jwtService.generateAccessToken(userDetails);
         String refreshTokenString = jwtService.generateRefreshToken(userDetails);
 
-        // Store refresh token in DB
+        // Store hashed refresh token in DB
+        String hashedToken = hashToken(refreshTokenString);
         RefreshToken refreshToken = RefreshToken.builder()
                 .user(user)
-                .token(refreshTokenString)
-                .expiresAt(Instant.now().plusSeconds(604800)) // 7 days
+                .token(hashedToken)
+                .expiresAt(Instant.now().plusSeconds(refreshExpiration / 1000))
                 .revoked(false)
                 .build();
         refreshTokenRepository.save(refreshToken);
@@ -231,9 +269,10 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Map<String, String> refreshToken(RefreshTokenRequest request) {
-        RefreshToken token = refreshTokenRepository.findByToken(request.getRefreshToken())
+        String hashedToken = hashToken(request.getRefreshToken());
+        RefreshToken token = refreshTokenRepository.findByToken(hashedToken)
                 .orElseThrow(() -> new RefreshTokenInvalidException("Invalid refresh token"));
 
         if (token.getRevoked()) {
@@ -244,15 +283,37 @@ public class AuthService {
             throw new RefreshTokenExpiredException("Refresh token has expired");
         }
 
-        CustomUserDetails userDetails = new CustomUserDetails(token.getUser());
-        String newAccessToken = jwtService.generateAccessToken(userDetails);
+        // Revoke the old token (Rotation)
+        token.setRevoked(true);
+        refreshTokenRepository.save(token);
 
-        return Collections.singletonMap("accessToken", newAccessToken);
+        User user = token.getUser();
+        CustomUserDetails userDetails = new CustomUserDetails(user);
+        
+        // Generate new Access and Refresh tokens
+        String newAccessToken = jwtService.generateAccessToken(userDetails);
+        String newRefreshTokenString = jwtService.generateRefreshToken(userDetails);
+
+        // Store new hashed refresh token in DB
+        String newHashedToken = hashToken(newRefreshTokenString);
+        RefreshToken newRefreshToken = RefreshToken.builder()
+                .user(user)
+                .token(newHashedToken)
+                .expiresAt(Instant.now().plusSeconds(refreshExpiration / 1000))
+                .revoked(false)
+                .build();
+        refreshTokenRepository.save(newRefreshToken);
+
+        Map<String, String> tokens = new HashMap<>();
+        tokens.put("accessToken", newAccessToken);
+        tokens.put("refreshToken", newRefreshTokenString);
+        return tokens;
     }
 
     @Transactional
     public void logout(LogoutRequest request) {
-        RefreshToken token = refreshTokenRepository.findByToken(request.getRefreshToken())
+        String hashedToken = hashToken(request.getRefreshToken());
+        RefreshToken token = refreshTokenRepository.findByToken(hashedToken)
                 .orElseThrow(() -> new RefreshTokenInvalidException("Invalid refresh token"));
 
         token.setRevoked(true);
@@ -261,8 +322,13 @@ public class AuthService {
 
     @Transactional
     public Map<String, String> forgotPassword(ForgotPasswordRequest request) {
+        // Invalidate active PASSWORD_RESET OTPs first
+        invalidatePreviousOtps(request.getEmail(), VerificationPurpose.PASSWORD_RESET);
+
         if (!userRepository.existsByEmail(request.getEmail())) {
-            throw new UserNotFoundException("User not found with email: " + request.getEmail());
+            // Log internally but return success response (empty map) to prevent user enumeration
+            log.info("Forgot password requested for non-existent email: {}", request.getEmail());
+            return Collections.emptyMap();
         }
 
         String otp = generateOtp();
@@ -317,9 +383,10 @@ public class AuthService {
             throw new OtpInvalidException("Email is already verified");
         }
 
+        // Invalidate active OTPs for the requested purpose
+        invalidatePreviousOtps(request.getEmail(), request.getPurpose());
 
         String otp = generateOtp();
-
 
         VerificationToken token = VerificationToken.builder()
                 .email(request.getEmail())

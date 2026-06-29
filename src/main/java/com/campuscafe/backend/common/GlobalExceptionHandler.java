@@ -2,6 +2,7 @@ package com.campuscafe.backend.common;
 
 import com.campuscafe.backend.exception.*;
 import com.campuscafe.backend.mail.exception.EmailSendFailedException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
@@ -118,7 +120,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGeneralException(Exception ex) {
+        log.error("Unhandled exception caught in GlobalExceptionHandler: ", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.failure("An unexpected error occurred", List.of(ex.getMessage() != null ? ex.getMessage() : "Internal server error")));
+                .body(ApiResponse.failure("An unexpected error occurred", List.of("Internal server error")));
     }
 }

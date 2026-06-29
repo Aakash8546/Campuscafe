@@ -22,4 +22,8 @@ public interface InventoryItemRepository extends JpaRepository<InventoryItem, Lo
 
     @Query("SELECT COUNT(i) FROM InventoryItem i WHERE i.merchant.id = :merchantId AND i.currentStock <= i.minStock")
     long countLowStockItems(@Param("merchantId") Long merchantId);
+
+    @org.springframework.data.jpa.repository.Lock(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT i FROM InventoryItem i WHERE i.id = :id")
+    Optional<InventoryItem> findAndLockById(@Param("id") Long id);
 }

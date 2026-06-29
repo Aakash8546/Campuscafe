@@ -72,6 +72,7 @@ public class OrderService {
     private final InventoryTransactionRepository inventoryTransactionRepository;
     private final MerchantSettingRepository merchantSettingRepository;
     private final WebSocketService webSocketService;
+    private final java.security.SecureRandom secureRandom = new java.security.SecureRandom();
 
     private final OrderMapper orderMapper;
 
@@ -96,7 +97,8 @@ public class OrderService {
             throw new InvalidOrderRequestException("Order must contain at least one item");
         }
 
-        Merchant merchant = merchantRepository.findById(merchantId)
+        Merchant merchant = merchantRepository.findAndLockById(merchantId)
+                .or(() -> merchantRepository.findById(merchantId))
                 .orElseThrow(() -> new AccessDeniedException("Merchant not found"));
 
         if (merchant.getShopStatus() == ShopStatus.CLOSED) {
@@ -214,10 +216,9 @@ public class OrderService {
         java.time.Instant startOfDay = today.atStartOfDay(java.time.ZoneOffset.UTC).toInstant();
         java.time.Instant endOfDay = today.plusDays(1).atStartOfDay(java.time.ZoneOffset.UTC).toInstant();
 
-        java.security.SecureRandom random = new java.security.SecureRandom();
         String orderNumber;
         do {
-            int num = random.nextInt(10000);
+            int num = secureRandom.nextInt(10000);
             orderNumber = String.format("%04d", num);
         } while (orderRepository.existsByMerchantIdAndOrderNumberAndCreatedAtBetween(merchantId, orderNumber, startOfDay, endOfDay));
 
@@ -378,7 +379,7 @@ public class OrderService {
     }
 
     private void deductInventoryForOrder(Order order, User userEntity) {
-        java.util.Map<InventoryItem, BigDecimal> requiredDeductions = new java.util.HashMap<>();
+        java.util.Map<Long, BigDecimal> requiredDeductions = new java.util.HashMap<>();
 
         for (OrderItem item : order.getItems()) {
             List<ProductRecipe> recipes = productRecipeRepository.findByProductId(item.getProduct().getId());
@@ -387,30 +388,27 @@ public class OrderService {
                 BigDecimal perItemQty = recipe.getQuantityRequired();
                 BigDecimal totalQty = perItemQty.multiply(BigDecimal.valueOf(item.getQuantity()));
                 
-                requiredDeductions.put(ingredient, requiredDeductions.getOrDefault(ingredient, BigDecimal.ZERO).add(totalQty));
+                requiredDeductions.put(ingredient.getId(), requiredDeductions.getOrDefault(ingredient.getId(), BigDecimal.ZERO).add(totalQty));
             }
         }
 
+        // Sort ingredient IDs to prevent deadlocks under high concurrent orders
+        List<Long> sortedIngredientIds = new java.util.ArrayList<>(requiredDeductions.keySet());
+        java.util.Collections.sort(sortedIngredientIds);
 
-        for (java.util.Map.Entry<InventoryItem, BigDecimal> entry : requiredDeductions.entrySet()) {
-            InventoryItem ingredient = entry.getKey();
-            BigDecimal req = entry.getValue();
+        // Fetch, Lock, Validate and Deduct in a single atomic pass per ingredient
+        for (Long id : sortedIngredientIds) {
+            BigDecimal req = requiredDeductions.get(id);
 
-            InventoryItem dbItem = inventoryItemRepository.findById(ingredient.getId())
-                    .orElseThrow(() -> new InventoryItemNotFoundException("Inventory item not found: " + ingredient.getName()));
+            InventoryItem dbItem = inventoryItemRepository.findAndLockById(id)
+                    .or(() -> inventoryItemRepository.findById(id))
+                    .orElseThrow(() -> new InventoryItemNotFoundException("Inventory item not found with id: " + id));
 
             if (dbItem.getCurrentStock().compareTo(req) < 0) {
                 throw new InsufficientInventoryException("Insufficient inventory for item: " + dbItem.getName() +
                         ". Available: " + dbItem.getCurrentStock() + ", Required: " + req);
             }
-        }
 
-
-        for (java.util.Map.Entry<InventoryItem, BigDecimal> entry : requiredDeductions.entrySet()) {
-            InventoryItem ingredient = entry.getKey();
-            BigDecimal req = entry.getValue();
-
-            InventoryItem dbItem = inventoryItemRepository.findById(ingredient.getId()).get();
             dbItem.setCurrentStock(dbItem.getCurrentStock().subtract(req));
             InventoryItem savedItem = inventoryItemRepository.save(dbItem);
 

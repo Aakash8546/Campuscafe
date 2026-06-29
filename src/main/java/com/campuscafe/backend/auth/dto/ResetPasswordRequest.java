@@ -3,6 +3,7 @@ package com.campuscafe.backend.auth.dto;
 import com.campuscafe.backend.auth.validator.ValidPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class ResetPasswordRequest {
     private String otp;
 
     @NotBlank(message = "New password is required")
+    @Size(max = 128, message = "Password must be less than 128 characters")
     @ValidPassword
     private String newPassword;
 }
