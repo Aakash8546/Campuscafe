@@ -39,7 +39,7 @@ class EmailServiceTest {
         lenient().when(emailProperties.getMailFrom()).thenReturn("sender@example.com");
         lenient().when(emailProperties.getMailFromName()).thenReturn("Test Sender");
         lenient().when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
-        lenient().when(environment.getActiveProfiles()).thenReturn(new String[]{"dev"});
+        lenient().when(environment.getActiveProfiles()).thenReturn(new String[]{"test"});
     }
 
     @Test
