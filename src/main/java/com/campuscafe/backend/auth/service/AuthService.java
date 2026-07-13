@@ -37,6 +37,8 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.UUID;
+import com.campuscafe.backend.domain.merchant.enums.VerificationStatus;
 
 @Service
 @RequiredArgsConstructor
@@ -87,29 +89,37 @@ public class AuthService {
 
     @Transactional
     public Map<String, String> signup(SignupRequest request) {
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
+            throw new PasswordsDoNotMatchException("Password and confirm password do not match");
+        }
+
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyExistsException("Email already exists: " + request.getEmail());
         }
 
+        String superAdminToken = UUID.randomUUID().toString();
 
         Merchant merchant = Merchant.builder()
                 .cafeName(request.getCafeName())
                 .email(request.getEmail())
                 .phone(request.getPhone())
-                .verified(false)
+                .address(request.getAddress())
+                .city(request.getCity())
+                .pincode(request.getPincode())
+                .verified(VerificationStatus.PENDING)
+                .emailVerified(false)
+                .superAdminToken(superAdminToken)
                 .active(true)
                 .build();
         merchant = merchantRepository.save(merchant);
 
-
         Role adminRole = roleRepository.findByName("ADMIN")
                 .orElseThrow(() -> new RuntimeException("ADMIN role not seeded in system"));
-
 
         User user = User.builder()
                 .merchant(merchant)
                 .role(adminRole)
-                .name(request.getCafeName() + " Admin")
+                .name(request.getFullName())
                 .email(request.getEmail())
                 .phone(request.getPhone())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -117,10 +127,8 @@ public class AuthService {
                 .build();
         userRepository.save(user);
 
-
         invalidatePreviousOtps(request.getEmail(), VerificationPurpose.EMAIL_VERIFICATION);
         String otp = generateOtp();
-
 
         VerificationToken token = VerificationToken.builder()
                 .email(request.getEmail())
@@ -132,6 +140,19 @@ public class AuthService {
         verificationTokenRepository.save(token);
 
         emailService.sendOtpEmail(request.getEmail(), otp, "EMAIL_VERIFICATION");
+
+        emailService.sendSuperAdminNotification(
+                "aakashsrivastava2151@gmail.com",
+                request.getCafeName(),
+                request.getFullName(),
+                request.getEmail(),
+                request.getPhone(),
+                request.getAddress(),
+                request.getCity(),
+                request.getPincode(),
+                merchant.getId(),
+                superAdminToken
+        );
 
         if (isDevProfile()) {
             return Collections.singletonMap("otp", otp);
@@ -160,7 +181,7 @@ public class AuthService {
                 .orElseThrow(() -> new UserNotFoundException("User not found with email: " + request.getEmail()));
 
         Merchant merchant = user.getMerchant();
-        merchant.setVerified(true);
+        merchant.setEmailVerified(true);
         merchantRepository.save(merchant);
     }
 
@@ -187,9 +208,19 @@ public class AuthService {
             throw new InvalidCredentialsException("Invalid email or password");
         }
 
-        if (!merchant.getVerified()) {
-            userLoginLogService.recordLog(merchant, user, request.getEmail(), ipAddress, userAgent, LoginStatus.FAILED, "Merchant account not verified");
-            throw new MerchantNotVerifiedException("Merchant account is not verified");
+        if (!merchant.getEmailVerified()) {
+            userLoginLogService.recordLog(merchant, user, request.getEmail(), ipAddress, userAgent, LoginStatus.FAILED, "Email not verified");
+            throw new MerchantNotVerifiedException("Please verify your email address first using OTP");
+        }
+
+        if (merchant.getVerified() == VerificationStatus.PENDING) {
+            userLoginLogService.recordLog(merchant, user, request.getEmail(), ipAddress, userAgent, LoginStatus.FAILED, "Merchant account pending approval");
+            throw new MerchantNotVerifiedException("Merchant account is pending approval by Super Admin");
+        }
+
+        if (merchant.getVerified() == VerificationStatus.REJECTED) {
+            userLoginLogService.recordLog(merchant, user, request.getEmail(), ipAddress, userAgent, LoginStatus.FAILED, "Merchant account has been rejected");
+            throw new MerchantNotVerifiedException("Merchant account has been rejected by Super Admin");
         }
 
         if (!user.getActive() || !merchant.getActive()) {
@@ -379,7 +410,7 @@ public class AuthService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UserNotFoundException("User not found with email: " + request.getEmail()));
 
-        if (request.getPurpose() == VerificationPurpose.EMAIL_VERIFICATION && user.getMerchant().getVerified()) {
+        if (request.getPurpose() == VerificationPurpose.EMAIL_VERIFICATION && user.getMerchant().getEmailVerified()) {
             throw new OtpInvalidException("Email is already verified");
         }
 
@@ -403,6 +434,30 @@ public class AuthService {
             return Collections.singletonMap("otp", otp);
         }
         return Collections.emptyMap();
+    }
+
+    @Transactional
+    public void verifyMerchantBySuperAdmin(Long merchantId, String token, String actionStr) {
+        Merchant merchant = merchantRepository.findById(merchantId)
+                .orElseThrow(() -> new MerchantNotFoundException("Merchant not found with id: " + merchantId));
+
+        if (merchant.getSuperAdminToken() == null || !merchant.getSuperAdminToken().equals(token)) {
+            throw new SuperAdminTokenInvalidException("Invalid or expired verification token");
+        }
+
+        VerificationStatus status;
+        try {
+            status = VerificationStatus.valueOf(actionStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid action: " + actionStr);
+        }
+
+        merchant.setVerified(status);
+        merchant.setSuperAdminToken(null);
+        merchantRepository.save(merchant);
+
+        String statusDescription = status == VerificationStatus.VERIFIED ? "Approved" : "Rejected";
+        emailService.sendMerchantApprovalStatusEmail(merchant.getEmail(), merchant.getCafeName(), statusDescription);
     }
 
     private String generateOtp() {
