@@ -29,7 +29,7 @@ public class SmtpEmailService implements EmailService {
         }
 
         String template = getEmailHtmlTemplate(otp);
-        int maxAttempts = emailProperties.getMaxAttempts() != null ? emailProperties.getMaxAttempts() : 10;
+        int maxAttempts = isDevProfile() ? 1 : (emailProperties.getMaxAttempts() != null ? emailProperties.getMaxAttempts() : 10);
         long delay = emailProperties.getInitialDelayMs() != null ? emailProperties.getInitialDelayMs() : 1000;
 
         for (int attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -55,6 +55,10 @@ public class SmtpEmailService implements EmailService {
             } catch (Exception e) {
                 log.warn("Email send failed on attempt {}/{} for {}. Error: {}", attempt, maxAttempts, recipientEmail, e.getMessage());
                 if (attempt == maxAttempts) {
+                    if (isDevProfile()) {
+                        log.error("[DEV] Failed to send OTP email to {}, but bypassing exception for local development.", recipientEmail, e);
+                        return;
+                    }
                     throw new EmailSendFailedException("Unable to send verification email. Please try again later.", e);
                 }
                 try {
@@ -235,7 +239,7 @@ public class SmtpEmailService implements EmailService {
     }
 
     private void sendHtmlEmail(String recipientEmail, String subject, String htmlContent) {
-        int maxAttempts = emailProperties.getMaxAttempts() != null ? emailProperties.getMaxAttempts() : 10;
+        int maxAttempts = isDevProfile() ? 1 : (emailProperties.getMaxAttempts() != null ? emailProperties.getMaxAttempts() : 10);
         long delay = emailProperties.getInitialDelayMs() != null ? emailProperties.getInitialDelayMs() : 1000;
 
         for (int attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -254,6 +258,10 @@ public class SmtpEmailService implements EmailService {
             } catch (Exception e) {
                 log.warn("Email send failed on attempt {}/{} for {}. Error: {}", attempt, maxAttempts, recipientEmail, e.getMessage());
                 if (attempt == maxAttempts) {
+                    if (isDevProfile()) {
+                        log.error("[DEV] Failed to send HTML email to {}, but bypassing exception for local development.", recipientEmail, e);
+                        return;
+                    }
                     throw new EmailSendFailedException("Unable to send notification email. Please try again later.", e);
                 }
                 try {
