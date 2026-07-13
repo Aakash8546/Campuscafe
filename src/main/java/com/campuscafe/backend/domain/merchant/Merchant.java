@@ -65,4 +65,20 @@ public class Merchant extends BaseEntity {
     @Column(name = "next_bill_serial", nullable = false)
     @Builder.Default
     private Long nextBillSerial = 0L;
+
+    public static class MerchantBuilder {
+        private VerificationStatus verified;
+        private Boolean emailVerified;
+
+        public MerchantBuilder verified(Boolean verified) {
+            this.verified = verified ? VerificationStatus.VERIFIED : VerificationStatus.PENDING;
+            this.emailVerified = verified; // maintain emailVerified status matching older boolean tests
+            return this;
+        }
+
+        public MerchantBuilder verified(VerificationStatus verified) {
+            this.verified = verified;
+            return this;
+        }
+    }
 }
