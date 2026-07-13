@@ -22,6 +22,9 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "verification_tokens")
+/**
+ * Entity representing OTP verification tokens issued for email verification or password reset.
+ */
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
