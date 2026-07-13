@@ -46,7 +46,9 @@ public class GlobalExceptionHandler {
             InactiveDiscountException.class,
             InvalidDateRangeException.class,
             ReportGenerationException.class,
-            InsufficientInventoryException.class
+            InsufficientInventoryException.class,
+            PasswordsDoNotMatchException.class,
+            SuperAdminTokenInvalidException.class
     })
     public ResponseEntity<ApiResponse<Void>> handleBadRequestExceptions(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
