@@ -15,6 +15,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SignupRequest {
 
+    @NotBlank(message = "Full name is required")
+    @Size(max = 100, message = "Full name must be less than 100 characters")
+    private String fullName;
+
     @NotBlank(message = "Cafe name is required")
     @Size(max = 100, message = "Cafe name must be less than 100 characters")
     private String cafeName;
@@ -32,4 +36,19 @@ public class SignupRequest {
     @Size(max = 128, message = "Password must be less than 128 characters")
     @ValidPassword
     private String password;
+
+    @NotBlank(message = "Confirm password is required")
+    @Size(max = 128, message = "Confirm password must be less than 128 characters")
+    private String confirmPassword;
+
+    @NotBlank(message = "Cafe address is required")
+    private String address;
+
+    @NotBlank(message = "City is required")
+    @Size(max = 50, message = "City must be less than 50 characters")
+    private String city;
+
+    @NotBlank(message = "Pincode is required")
+    @Size(max = 10, message = "Pincode must be less than 10 characters")
+    private String pincode;
 }
