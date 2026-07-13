@@ -8,3 +8,8 @@ target/
 .settings/
 .classpath
 .project
+
+# OS and Log files
+.DS_Store
+*_log.txt
+*.log
