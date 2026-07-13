@@ -163,6 +163,10 @@ public class SmtpEmailService implements EmailService {
         String approveUrl = baseUrl + "/auth/super-admin/merchants/verify?merchantId=" + merchantId + "&token=" + token + "&action=VERIFIED";
         String rejectUrl = baseUrl + "/auth/super-admin/merchants/verify?merchantId=" + merchantId + "&token=" + token + "&action=REJECTED";
 
+        if (isDevProfile()) {
+            log.info("[DEV] Super Admin Action Links:\nApprove Link: {}\nReject Link: {}", approveUrl, rejectUrl);
+        }
+
         String template = """
         <!DOCTYPE html>
         <html>
