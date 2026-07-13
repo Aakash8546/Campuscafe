@@ -88,4 +88,37 @@ public class AuthController {
         authService.changePassword(userDetails.getUserId(), request);
         return ResponseEntity.ok(ApiResponse.success("Password changed successfully", null));
     }
+
+    @org.springframework.web.bind.annotation.GetMapping("/super-admin/merchants/verify")
+    @Operation(summary = "Super Admin endpoint to verify or reject a merchant account via secure email link")
+    public ResponseEntity<String> verifyMerchant(
+            @org.springframework.web.bind.annotation.RequestParam Long merchantId,
+            @org.springframework.web.bind.annotation.RequestParam String token,
+            @org.springframework.web.bind.annotation.RequestParam String action
+    ) {
+        authService.verifyMerchantBySuperAdmin(merchantId, token, action);
+        String actionLower = action.toLowerCase();
+        String htmlResponse = """
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Verification Success</title>
+            <style>
+                body { font-family: Arial, sans-serif; text-align: center; padding-top: 50px; background-color: #f9f9f9; }
+                .card { max-width: 500px; margin: auto; padding: 30px; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+                h1 { color: #5D4037; }
+                p { font-size: 16px; color: #555; }
+            </style>
+        </head>
+        <body>
+            <div class="card">
+                <h1>Action Completed</h1>
+                <p>Merchant account has been successfully <strong>%s</strong>.</p>
+                <p>You can now close this tab.</p>
+            </div>
+        </body>
+        </html>
+        """.formatted(actionLower.equals("verified") ? "approved" : "rejected");
+        return ResponseEntity.ok().contentType(org.springframework.http.MediaType.TEXT_HTML).body(htmlResponse);
+    }
 }
