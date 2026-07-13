@@ -443,6 +443,10 @@ public class AuthService {
         return Collections.emptyMap();
     }
 
+    /**
+     * Verifies or rejects a merchant account based on the Super Admin's action and secure link token.
+     * Invalidates the token after execution.
+     */
     @Transactional
     public void verifyMerchantBySuperAdmin(Long merchantId, String token, String actionStr) {
         Merchant merchant = merchantRepository.findById(merchantId)
