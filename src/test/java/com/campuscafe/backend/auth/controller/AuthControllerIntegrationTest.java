@@ -45,10 +45,15 @@ class AuthControllerIntegrationTest {
     @Test
     void testSignup_Success() throws Exception {
         SignupRequest request = SignupRequest.builder()
+                .fullName("Owner Name")
                 .cafeName("Test Cafe")
                 .email("admin@test.com")
                 .phone("9876543210")
                 .password("Password@123")
+                .confirmPassword("Password@123")
+                .address("123 Test St")
+                .city("Test City")
+                .pincode("123456")
                 .build();
 
         when(authService.signup(any(SignupRequest.class))).thenReturn(Collections.singletonMap("otp", "123456"));
