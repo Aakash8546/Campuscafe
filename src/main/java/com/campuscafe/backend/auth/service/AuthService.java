@@ -89,7 +89,8 @@ public class AuthService {
 
     @Transactional
     public Map<String, String> signup(SignupRequest request) {
-        if (!request.getPassword().equals(request.getConfirmPassword())) {
+        String confirmPassword = request.getConfirmPassword() != null ? request.getConfirmPassword() : request.getPassword();
+        if (!request.getPassword().equals(confirmPassword)) {
             throw new PasswordsDoNotMatchException("Password and confirm password do not match");
         }
 
@@ -99,13 +100,17 @@ public class AuthService {
 
         String superAdminToken = UUID.randomUUID().toString();
 
+        String address = request.getAddress() != null ? request.getAddress() : "Default Address";
+        String city = request.getCity() != null ? request.getCity() : "Default City";
+        String pincode = request.getPincode() != null ? request.getPincode() : "000000";
+
         Merchant merchant = Merchant.builder()
                 .cafeName(request.getCafeName())
                 .email(request.getEmail())
                 .phone(request.getPhone())
-                .address(request.getAddress())
-                .city(request.getCity())
-                .pincode(request.getPincode())
+                .address(address)
+                .city(city)
+                .pincode(pincode)
                 .verified(VerificationStatus.PENDING)
                 .emailVerified(false)
                 .superAdminToken(superAdminToken)
@@ -116,10 +121,12 @@ public class AuthService {
         Role adminRole = roleRepository.findByName("ADMIN")
                 .orElseThrow(() -> new RuntimeException("ADMIN role not seeded in system"));
 
+        String fullName = request.getFullName() != null ? request.getFullName() : request.getCafeName() + " Admin";
+
         User user = User.builder()
                 .merchant(merchant)
                 .role(adminRole)
-                .name(request.getFullName())
+                .name(fullName)
                 .email(request.getEmail())
                 .phone(request.getPhone())
                 .password(passwordEncoder.encode(request.getPassword()))
