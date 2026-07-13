@@ -89,6 +89,10 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success("Password changed successfully", null));
     }
 
+    /**
+     * Handles Super Admin verification/rejection requests clicked from approval emails.
+     * Returns a styled HTML success page on successful processing.
+     */
     @org.springframework.web.bind.annotation.GetMapping("/super-admin/merchants/verify")
     @Operation(summary = "Super Admin endpoint to verify or reject a merchant account via secure email link")
     public ResponseEntity<String> verifyMerchant(
