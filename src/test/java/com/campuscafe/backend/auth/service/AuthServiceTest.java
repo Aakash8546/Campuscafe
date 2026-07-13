@@ -2,6 +2,7 @@ package com.campuscafe.backend.auth.service;
 
 import com.campuscafe.backend.auth.dto.*;
 import com.campuscafe.backend.domain.merchant.Merchant;
+import com.campuscafe.backend.domain.merchant.enums.VerificationStatus;
 import com.campuscafe.backend.domain.user.Role;
 import com.campuscafe.backend.domain.user.User;
 import com.campuscafe.backend.domain.user.VerificationToken;
@@ -128,6 +129,7 @@ class AuthServiceTest {
         authService.verifyOtp(request);
 
         assertTrue(token.getVerified());
-        assertTrue(merchant.getVerified());
+        assertTrue(merchant.getEmailVerified());
+        assertEquals(VerificationStatus.PENDING, merchant.getVerified());
     }
 }
