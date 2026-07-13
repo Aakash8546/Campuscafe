@@ -2,6 +2,7 @@ package com.campuscafe.backend.domain.merchant;
 
 import com.campuscafe.backend.domain.base.BaseEntity;
 import com.campuscafe.backend.domain.merchant.enums.ShopStatus;
+import com.campuscafe.backend.domain.merchant.enums.VerificationStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -45,9 +46,17 @@ public class Merchant extends BaseEntity {
     @Column(name = "pincode", length = 10)
     private String pincode;
 
-    @Column(name = "verified", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "verified", nullable = false, length = 20)
     @Builder.Default
-    private Boolean verified = false;
+    private VerificationStatus verified = VerificationStatus.PENDING;
+
+    @Column(name = "email_verified", nullable = false)
+    @Builder.Default
+    private Boolean emailVerified = false;
+
+    @Column(name = "super_admin_token", length = 100)
+    private String superAdminToken;
 
     @Column(name = "active", nullable = false)
     @Builder.Default
