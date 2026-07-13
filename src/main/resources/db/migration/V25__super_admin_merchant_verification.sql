@@ -1,3 +1,4 @@
+-- Migration Version 25: Super Admin Merchant Verification and Onboarding Flow Support
 -- Alter merchants table to handle multi-state verification status
 ALTER TABLE merchants RENAME COLUMN verified TO temp_verified;
 ALTER TABLE merchants ADD COLUMN verified VARCHAR(20) NOT NULL DEFAULT 'PENDING';
