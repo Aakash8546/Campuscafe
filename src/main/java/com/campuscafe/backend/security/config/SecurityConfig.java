@@ -54,6 +54,7 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/auth/signup",
                     "/auth/verify-otp",
+                    "/auth/super-admin/merchants/verify",
                     "/auth/login",
                     "/auth/refresh-token",
                     "/auth/forgot-password",
