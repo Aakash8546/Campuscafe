@@ -34,7 +34,7 @@ public class AuthController {
     @Operation(summary = "Verify merchant email using OTP")
     public ResponseEntity<ApiResponse<Void>> verifyOtp(@Valid @RequestBody VerifyOtpRequest request) {
         authService.verifyOtp(request);
-        return ResponseEntity.ok(ApiResponse.success("OTP verified successfully. Merchant account activated.", null));
+        return ResponseEntity.ok(ApiResponse.success("OTP verified successfully. Your account is pending Super Admin approval.", null));
     }
 
     @PostMapping("/login")
