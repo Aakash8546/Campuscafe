@@ -132,4 +132,44 @@ class AuthServiceTest {
         assertTrue(merchant.getEmailVerified());
         assertEquals(VerificationStatus.PENDING, merchant.getVerified());
     }
+
+    @Test
+    void testVerifyMerchantBySuperAdmin_Success() {
+        Merchant merchant = Merchant.builder()
+                .cafeName("Test Cafe")
+                .email("admin@test.com")
+                .verified(VerificationStatus.PENDING)
+                .superAdminToken("super-token")
+                .build();
+        merchant.setId(1L);
+
+        when(merchantRepository.findById(1L)).thenReturn(Optional.of(merchant));
+
+        authService.verifyMerchantBySuperAdmin(1L, "super-token", "VERIFIED");
+
+        assertEquals(VerificationStatus.VERIFIED, merchant.getVerified());
+        assertNull(merchant.getSuperAdminToken());
+        verify(merchantRepository, times(1)).save(merchant);
+        verify(emailService, times(1)).sendMerchantApprovalStatusEmail(eq("admin@test.com"), eq("Test Cafe"), eq("Approved"));
+    }
+
+    @Test
+    void testVerifyMerchantBySuperAdmin_InvalidToken() {
+        Merchant merchant = Merchant.builder()
+                .cafeName("Test Cafe")
+                .email("admin@test.com")
+                .verified(VerificationStatus.PENDING)
+                .superAdminToken("super-token")
+                .build();
+        merchant.setId(1L);
+
+        when(merchantRepository.findById(1L)).thenReturn(Optional.of(merchant));
+
+        assertThrows(com.campuscafe.backend.exception.SuperAdminTokenInvalidException.class, () -> {
+            authService.verifyMerchantBySuperAdmin(1L, "wrong-token", "VERIFIED");
+        });
+
+        assertEquals(VerificationStatus.PENDING, merchant.getVerified());
+        verify(merchantRepository, never()).save(any(Merchant.class));
+    }
 }
