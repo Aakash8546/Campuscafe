@@ -64,7 +64,8 @@ public class GlobalExceptionHandler {
             DiscountNotFoundException.class,
             NotificationNotFoundException.class,
             MerchantSettingsNotFoundException.class,
-            RecipeNotFoundException.class
+            RecipeNotFoundException.class,
+            MerchantNotFoundException.class
     })
     public ResponseEntity<ApiResponse<Void>> handleNotFoundExceptions(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
