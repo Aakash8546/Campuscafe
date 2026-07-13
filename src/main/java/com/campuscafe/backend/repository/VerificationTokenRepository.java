@@ -11,8 +11,14 @@ import org.springframework.stereotype.Repository;
 import java.time.Instant;
 import java.util.Optional;
 
+/**
+ * Repository interface for managing VerificationToken database transactions.
+ */
 @Repository
 public interface VerificationTokenRepository extends JpaRepository<VerificationToken, Long> {
+    /**
+     * Finds a verification token by email, OTP code, and purpose.
+     */
     Optional<VerificationToken> findByEmailAndOtpAndPurpose(String email, String otp, VerificationPurpose purpose);
 
     @Modifying
